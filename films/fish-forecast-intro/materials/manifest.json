@@ -1,0 +1,207 @@
+{
+  "sources": [
+    {
+      "kind": "web",
+      "from": "http://127.0.0.1:8765/",
+      "at": "2026-11-05T14:03:29.283Z",
+      "title": "Oregon Fish Forecast · Read the river",
+      "description": "Oregon Fish Forecast, version two. Dated reports, river gauges, dam counts and trout stocking for 31 Oregon and Southwest Washington reaches, on one page.",
+      "files": [
+        {
+          "kind": "screen",
+          "file": "materials/web-127-0-0-1-8765/screen-01.png",
+          "from": "http://127.0.0.1:8765/",
+          "note": "y=0px, 2x"
+        },
+        {
+          "kind": "screen",
+          "file": "materials/web-127-0-0-1-8765/screen-02.png",
+          "from": "http://127.0.0.1:8765/",
+          "note": "y=900px, 2x"
+        },
+        {
+          "kind": "screen",
+          "file": "materials/web-127-0-0-1-8765/screen-03.png",
+          "from": "http://127.0.0.1:8765/",
+          "note": "y=1800px, 2x"
+        },
+        {
+          "kind": "screen",
+          "file": "materials/web-127-0-0-1-8765/screen-04.png",
+          "from": "http://127.0.0.1:8765/",
+          "note": "y=2700px, 2x"
+        },
+        {
+          "kind": "screen",
+          "file": "materials/web-127-0-0-1-8765/screen-05.png",
+          "from": "http://127.0.0.1:8765/",
+          "note": "y=3600px, 2x"
+        },
+        {
+          "kind": "screen",
+          "file": "materials/web-127-0-0-1-8765/screen-06.png",
+          "from": "http://127.0.0.1:8765/",
+          "note": "y=4500px, 2x"
+        },
+        {
+          "kind": "screen",
+          "file": "materials/web-127-0-0-1-8765/screen-07.png",
+          "from": "http://127.0.0.1:8765/",
+          "note": "y=5400px, 2x"
+        },
+        {
+          "kind": "screen",
+          "file": "materials/web-127-0-0-1-8765/screen-08.png",
+          "from": "http://127.0.0.1:8765/",
+          "note": "y=6300px, 2x"
+        },
+        {
+          "kind": "logo",
+          "file": "materials/web-127-0-0-1-8765/logo-01.webp",
+          "from": "http://127.0.0.1:8765/assets/weather-fish.webp",
+          "note": "icon"
+        },
+        {
+          "kind": "image",
+          "file": "materials/web-127-0-0-1-8765/image-01.webp",
+          "from": "http://127.0.0.1:8765/assets/river-country-landscape.webp",
+          "note": "1280×683 \"Illustration of a blue river winding between evergreen forest toward snowy mount\""
+        }
+      ],
+      "colours": [
+        {
+          "role": "ground",
+          "hex": "oklch(0.936 0.018 95)",
+          "w": 4970359.125
+        },
+        {
+          "role": "ground",
+          "hex": "oklch(0.974 0.012 95)",
+          "w": 4565815.65625
+        },
+        {
+          "role": "ground",
+          "hex": "oklch(0.3056 0.0641 163.5)",
+          "w": 3530582.5625
+        },
+        {
+          "role": "ground",
+          "hex": "oklch(0.21 0.045 166)",
+          "w": 3046815
+        },
+        {
+          "role": "type",
+          "hex": "oklch(0.46 0.03 165)",
+          "w": 5185
+        },
+        {
+          "role": "type",
+          "hex": "oklch(0.24 0.04 163)",
+          "w": 4127
+        },
+        {
+          "role": "type",
+          "hex": "oklch(0.78 0.035 150)",
+          "w": 2442
+        },
+        {
+          "role": "accent",
+          "hex": "oklch(0.24 0.04 163)",
+          "w": 1430
+        },
+        {
+          "role": "accent",
+          "hex": "oklch(0.3056 0.0641 163.5)",
+          "w": 920
+        },
+        {
+          "role": "accent",
+          "hex": "oklch(0.91 0.18 103)",
+          "w": 490
+        },
+        {
+          "role": "accent",
+          "hex": "oklch(0.95 0.02 120)",
+          "w": 450
+        },
+        {
+          "role": "css --ink",
+          "hex": "oklch(30.56% 0.0641 163.5)"
+        },
+        {
+          "role": "css --ink-deep",
+          "hex": "oklch(21% 0.045 166)"
+        },
+        {
+          "role": "css --ink-soft",
+          "hex": "oklch(38% 0.06 163)"
+        },
+        {
+          "role": "css --paper",
+          "hex": "oklch(97.4% 0.012 95)"
+        },
+        {
+          "role": "css --paper-2",
+          "hex": "oklch(93.6% 0.018 95)"
+        },
+        {
+          "role": "css --paper-3",
+          "hex": "oklch(89% 0.022 95)"
+        },
+        {
+          "role": "css --text",
+          "hex": "oklch(24% 0.04 163)"
+        },
+        {
+          "role": "css --muted",
+          "hex": "oklch(46% 0.03 165)"
+        },
+        {
+          "role": "css --on-ink",
+          "hex": "oklch(95% 0.02 120)"
+        },
+        {
+          "role": "css --on-ink-muted",
+          "hex": "oklch(78% 0.035 150)"
+        },
+        {
+          "role": "css --river",
+          "hex": "oklch(60% 0.15 245)"
+        },
+        {
+          "role": "css --river-deep",
+          "hex": "oklch(42% 0.16 262)"
+        },
+        {
+          "role": "css --sun",
+          "hex": "oklch(91% 0.18 103)"
+        },
+        {
+          "role": "css --sun-deep",
+          "hex": "oklch(80% 0.17 92)"
+        },
+        {
+          "role": "css --alert",
+          "hex": "oklch(58% 0.17 45)"
+        }
+      ],
+      "fonts": [
+        {
+          "family": "Instrument Sans",
+          "chars": 9051
+        },
+        {
+          "family": "JetBrains Mono",
+          "chars": 2981
+        },
+        {
+          "family": "Fraunces",
+          "chars": 1601
+        }
+      ],
+      "missing": [
+        "page continues below 7200px (raise --shots)"
+      ]
+    }
+  ]
+}
