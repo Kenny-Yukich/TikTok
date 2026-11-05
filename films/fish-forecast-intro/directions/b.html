@@ -1,0 +1,71 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>B · Through the page</title>
+<link rel="stylesheet" href="brand.css">
+<style>
+  .frame { background: radial-gradient(1100px 900px at 50% 40%, var(--paper), var(--paper-2)); perspective: 1700px; perspective-origin: 50% 45%; }
+  /* the site's mobile column, cut into its real panels and lifted apart in depth */
+  .world { position: absolute; left: -90px; top: 60px; width: 900px; transform-style: preserve-3d;
+           transform: translateZ(-900px) rotateX(36deg) rotateZ(-16deg) rotateY(6deg); transform-origin: 50% 50%; }
+  .layer { position: absolute; left: 0; width: 900px; transform-style: preserve-3d; }
+  .hero { top: 0; height: 900px; border-radius: 34px; background: radial-gradient(700px 500px at 80% 30%, oklch(34% 0.07 150 / .6), transparent 70%), var(--ink-deep); overflow: hidden; box-shadow: 0 60px 90px oklch(30% 0.05 165 / .25); }
+  .hero .mark { position: absolute; left: 56px; top: 50px; display: flex; align-items: center; gap: 16px; color: var(--on-ink); font: 500 34px/1 var(--display); letter-spacing: -0.01em; }
+  .hero .mark img { width: 110px; }
+  .hero .mark em { font-style: italic; font-weight: 400; }
+  .hero .eb { position: absolute; left: 58px; top: 170px; color: var(--on-ink-muted); font-size: 19px; }
+  .hero h1 { position: absolute; left: 50px; top: 220px; font-size: 128px; color: var(--on-ink); }
+  .hero h1 em { display: block; color: var(--sun); padding-left: 70px; }
+  .hero .plate { position: absolute; left: 30px; right: 30px; bottom: 0; height: 330px; border-radius: 22px 22px 0 0; background: url(../assets/river-country.webp) 50% 62% / cover; }
+  .card { position: absolute; width: 420px; height: 520px; border-radius: 30px; background: var(--paper); border: 1.5px solid var(--line); box-shadow: 0 40px 70px oklch(30% 0.05 165 / .22); color: var(--text); }
+  .ring { position: absolute; left: 34px; top: 36px; width: 112px; height: 112px; }
+  .ring b { position: absolute; inset: 0; display: grid; place-items: center; font: 500 40px var(--mono); letter-spacing: -0.04em; }
+  .meta { position: absolute; left: 166px; top: 42px; }
+  .meta small { display: block; font: 500 15px/1.4 var(--mono); letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+  .meta strong { display: block; font: 400 38px/1.1 var(--display); margin: 2px 0; }
+  .card h3 { position: absolute; left: 34px; top: 180px; margin: 0; font: 400 46px/1 var(--display); letter-spacing: -0.02em; }
+  .card .reach { position: absolute; left: 34px; top: 236px; width: 350px; font: 400 21px/1.35 var(--sans); color: var(--muted); }
+  .card q { position: absolute; left: 34px; top: 330px; width: 350px; font: italic 400 25px/1.3 var(--display); quotes: none; }
+  .card .foot { position: absolute; left: 34px; bottom: 34px; font: 400 16px var(--mono); color: var(--muted); }
+  .card .go { position: absolute; right: 30px; bottom: 26px; width: 54px; height: 54px; border-radius: 50%; background: var(--ink); color: var(--on-ink); display: grid; place-items: center; font: 400 24px var(--sans); }
+</style></head>
+<body><div class="frame" data-width="1080" data-height="1920">
+  <div class="world">
+    <div class="layer hero" style="transform: translateZ(0)">
+      <div class="mark"><img src="../assets/weather-fish.webp" alt=""><span>Oregon <em>Fish Forecast</em></span></div>
+      <div class="eyebrow eb">31 reaches · refreshed every morning</div>
+      <h1 class="display">Read the river <em>before you drive.</em></h1>
+      <div class="plate"></div>
+    </div>
+    <div class="card" style="left:0; top:960px; transform: translateZ(140px)">
+      <svg class="ring" viewBox="0 0 112 112"><circle cx="56" cy="56" r="48" fill="none" stroke="oklch(90% 0.02 95)" stroke-width="10"/><circle cx="56" cy="56" r="48" fill="none" stroke="var(--ink)" stroke-width="10" stroke-linecap="round" stroke-dasharray="229 302" transform="rotate(-90 56 56)"/></svg>
+      <div class="ring" style="pointer-events:none"><b>76</b></div>
+      <div class="meta"><small>Fishing score</small><strong>Good</strong><small>Low confidence</small></div>
+      <h3>Cowlitz River</h3><div class="reach">Barrier Dam to Blue Creek</div>
+      <q>Coho are in at Blue Creek and fishing is good.</q>
+      <div class="foot">SW Washington · Oct 6</div><div class="go">→</div>
+    </div>
+    <div class="card" style="left:480px; top:960px; transform: translateZ(260px)">
+      <svg class="ring" viewBox="0 0 112 112"><circle cx="56" cy="56" r="48" fill="none" stroke="oklch(90% 0.02 95)" stroke-width="10"/><circle cx="56" cy="56" r="48" fill="none" stroke="var(--ink)" stroke-width="10" stroke-linecap="round" stroke-dasharray="217 302" transform="rotate(-90 56 56)"/></svg>
+      <div class="ring"><b>72</b></div>
+      <div class="meta"><small>Fishing score</small><strong>Good</strong><small>Medium confidence</small></div>
+      <h3>Crooked River</h3><div class="reach">Bowman Dam to Castle Rock Campground</div>
+      <q>ODFW reports strong trout/whitefish fishing and reduced autumn flows.</q>
+      <div class="foot">Central Oregon · Oct 8</div><div class="go">→</div>
+    </div>
+    <div class="card" style="left:0; top:1540px; transform: translateZ(380px)">
+      <svg class="ring" viewBox="0 0 112 112"><circle cx="56" cy="56" r="48" fill="none" stroke="oklch(90% 0.02 95)" stroke-width="10"/><circle cx="56" cy="56" r="48" fill="none" stroke="var(--ink)" stroke-width="10" stroke-linecap="round" stroke-dasharray="211 302" transform="rotate(-90 56 56)"/></svg>
+      <div class="ring"><b>70</b></div>
+      <div class="meta"><small>Fishing score</small><strong>Good</strong><small>Medium confidence</small></div>
+      <h3>Diamond Lake</h3><div class="reach">Lake Creek and north-shore area</div>
+      <q>ODFW reports good trout catches, with brown and tiger trout released.</q>
+      <div class="foot">Southern Cascades · Oct 7</div><div class="go">→</div>
+    </div>
+    <div class="card" style="left:480px; top:1540px; transform: translateZ(500px)">
+      <svg class="ring" viewBox="0 0 112 112"><circle cx="56" cy="56" r="48" fill="none" stroke="oklch(90% 0.02 95)" stroke-width="10"/><circle cx="56" cy="56" r="48" fill="none" stroke="var(--ink)" stroke-width="10" stroke-linecap="round" stroke-dasharray="211 302" transform="rotate(-90 56 56)"/></svg>
+      <div class="ring"><b>70</b></div>
+      <div class="meta"><small>Fishing score</small><strong>Good</strong><small>Medium confidence</small></div>
+      <h3>Lower Deschutes</h3><div class="reach">Warm Springs to Trout Creek</div>
+      <q>ODFW reports good trout fishing.</q>
+      <div class="foot">Central Oregon · Oct 5</div><div class="go">→</div>
+    </div>
+  </div>
+</div></body></html>
