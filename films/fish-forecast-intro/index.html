@@ -1,96 +1,335 @@
 <!doctype html>
-<html lang="zh-CN" data-composition-variables='[
-  {"id":"kicker","type":"string","label":"眉题","default":"HUASHU-MOTION"},
-  {"id":"title","type":"string","label":"标题","default":"一句话，变成会动的画面"},
-  {"id":"subtitle","type":"string","label":"副标题","default":"对着画面指一下，就能改"},
-  {"id":"stat","type":"number","label":"数字","default":100,"min":0,"max":9999,"step":1},
-  {"id":"statLabel","type":"string","label":"数字说明","default":"% 由代码生成，随时可改"},
-  {"id":"accent","type":"color","label":"强调色","default":"#d9480f"},
-  {"id":"paper","type":"color","label":"底色","default":"#f3eee4"},
-  {"id":"ink","type":"color","label":"文字色","default":"#1d1b18"},
-  {"id":"endHold","type":"number","label":"结尾停留（秒）","default":1.6,"min":0,"max":10,"step":0.1,"group":"节奏"}
+<html lang="en" data-composition-variables='[
+  {"id":"q1","type":"string","label":"Question, line 1","default":"Are the fish","group":"Hook"},
+  {"id":"q2","type":"string","label":"Question, line 2 (italic)","default":"in the river yet?","group":"Hook"},
+  {"id":"countEyebrow","type":"string","label":"Count label","default":"Bonneville Dam · 7 days to Nov 3","group":"Answer"},
+  {"id":"count","type":"number","label":"Fish counted","default":4496,"min":0,"max":99999,"step":1,"group":"Answer"},
+  {"id":"countText","type":"string","label":"Count caption","default":"adult Chinook, coho and steelhead counted climbing the ladder.","group":"Answer"},
+  {"id":"score","type":"number","label":"Fishing score","default":76,"min":0,"max":100,"step":1,"group":"Answer"},
+  {"id":"scoreWord","type":"string","label":"Score label","default":"Good","group":"Answer"},
+  {"id":"water","type":"string","label":"Water","default":"Cowlitz River","group":"Answer"},
+  {"id":"reach","type":"string","label":"Reach","default":"Barrier Dam to Blue Creek","group":"Answer"},
+  {"id":"rows","type":"string","label":"The four inputs (|-separated)","default":"Fishing reports|River gauges|Dam counts|Trout stocking","group":"Burst"},
+  {"id":"heroEyebrow","type":"string","label":"Hero eyebrow","default":"Oregon & SW Washington · 31 reaches","group":"Hero"},
+  {"id":"head1","type":"string","label":"Headline, line 1","default":"Read the river","group":"Hero"},
+  {"id":"head2","type":"string","label":"Headline, line 2 (italic)","default":"before you drive.","group":"Hero"},
+  {"id":"url1","type":"string","label":"Address, line 1","default":"kenny-yukich.github.io/","group":"End"},
+  {"id":"url2","type":"string","label":"Address, line 2","default":"oregon-fish-forecast-concept","group":"End"},
+  {"id":"sun","type":"color","label":"Sun yellow","default":"#F8E532","group":"Colour"}
 ]'>
 <head>
 <meta charset="utf-8">
-<title>huashu-motion · blank</title>
+<title>Oregon Fish Forecast · Read the river</title>
 <script src="vendor/gsap.min.js"></script>
+<script src="vendor/om.js"></script>
 <style id="om-fonts">
-@font-face { font-family: "Noto Sans SC"; src: url("assets/fonts/NotoSansSC-500.woff") format("woff"); font-weight: 500; font-style: normal; }
-@font-face { font-family: "Noto Sans SC"; src: url("assets/fonts/NotoSansSC-900.woff") format("woff"); font-weight: 900; font-style: normal; }
+@font-face { font-family: "Fraunces"; src: url("assets/fonts/Fraunces-full.woff2") format("woff2"); font-weight: 100 900; font-style: normal; }
+@font-face { font-family: "Fraunces"; src: url("assets/fonts/Fraunces-full-italic.woff2") format("woff2"); font-weight: 100 900; font-style: italic; }
+@font-face { font-family: "Instrument Sans"; src: url("assets/fonts/InstrumentSans-wght.woff2") format("woff2"); font-weight: 400 700; font-style: normal; }
+@font-face { font-family: "JetBrains Mono"; src: url("assets/fonts/JetBrainsMono-wght.woff2") format("woff2"); font-weight: 100 800; font-style: normal; }
 </style>
 <style>
-  html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
-  #film { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--paper); color: var(--ink); font-family: "Noto Sans SC", sans-serif; font-weight: 500; }
-  .grain { position: absolute; inset: 0; opacity: .5; background:
-      radial-gradient(1200px 700px at 20% 10%, #ffffff80, transparent 60%),
-      radial-gradient(900px 600px at 90% 100%, #00000010, transparent 60%); }
-  .kicker { position: absolute; left: 160px; top: 300px; font-size: 26px; letter-spacing: 10px; color: var(--accent); }
-  .title { position: absolute; margin: 0; left: 150px; top: 350px; width: 1620px; font-size: 128px; line-height: 1.12; letter-spacing: -4px; font-weight: 900; }
-  .title .ch { display: inline-block; }
-  .title .mask { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: 10px; }
-  .rule { position: absolute; left: 160px; top: 528px; width: 1100px; height: 10px; background: var(--accent); transform-origin: 0 50%; }
-  .subtitle { position: absolute; left: 160px; top: 580px; font-size: 44px; opacity: .72; }
-  .stat { position: absolute; left: 160px; top: 300px; display: flex; align-items: baseline; gap: 36px; }
-  .stat .num { font-size: 360px; line-height: 1; letter-spacing: -14px; font-weight: 900; color: var(--accent); font-variant-numeric: tabular-nums; }
-  .stat .lbl { font-size: 64px; }
-  .end span { display: block; }
-  .end { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 56px; letter-spacing: 4px; }
-  .end b { color: var(--accent); font-weight: 500; }
+  /* tokens from the site's v2/assets/site.css */
+  :root {
+    --ink: #023926; --ink-deep: #001F13; --on-ink: #ECF1E2; --on-ink-muted: #A8BEAC;
+    --plate: #F9F7EE; --display: 'Fraunces', Georgia, serif; --sans: 'Instrument Sans', sans-serif; --mono: 'JetBrains Mono', monospace;
+  }
+  html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: var(--ink-deep); }
+  #film { position: relative; width: 1080px; height: 1920px; overflow: hidden; color: var(--on-ink); font-family: var(--sans);
+          background: linear-gradient(180deg, var(--ink-deep), #00261A 60%, #002A1C); -webkit-font-smoothing: antialiased; }
+  .abs { position: absolute; }
+  #ans, #score, #rows, #hero { position: absolute; inset: 0; }
+  .ground-warm { position: absolute; inset: 0; background: radial-gradient(900px 760px at 76% 26%, rgba(46, 96, 52, .55), transparent 70%); opacity: 0; }
+  #paper { position: absolute; inset: 0; background: var(--plate); }
+  .ground-storm { position: absolute; inset: 0; background: radial-gradient(1000px 900px at 40% 40%, rgba(70, 92, 120, .32), transparent 70%); }
+  #rain { position: absolute; left: -200px; top: -400px; width: 1500px; height: 2800px; }
+  #rain i { position: absolute; width: 3px; border-radius: 3px; background: linear-gradient(180deg, transparent, rgba(220, 235, 245, .55)); transform: rotate(16deg); }
+
+  /* the fish: the real mark, never redrawn. Base: 700 px wide, centred at (540, 419). */
+  #fish { left: 190px; top: 250px; width: 700px; height: 338px; transform-origin: 50% 50%; }
+  #fishSwim { position: absolute; inset: 0; transform-origin: 50% 50%; }
+  #fishSwim img { position: absolute; inset: 0; width: 100%; height: 100%; filter: drop-shadow(0 26px 34px rgba(0, 12, 6, .55)); }
+  #glow { position: absolute; left: 623px; top: 169px; width: 0; height: 0; }
+  #glow::before { content: ''; position: absolute; left: -260px; top: -260px; width: 520px; height: 520px; border-radius: 50%;
+                  background: radial-gradient(circle, rgba(248, 229, 50, .55), rgba(248, 229, 50, .14) 42%, transparent 70%); }
+  #glowWrap { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+
+  .eyebrow { font: 500 26px/1.3 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--on-ink-muted); }
+  .display { font-family: var(--display); font-weight: 360; font-variation-settings: 'opsz' 144, 'SOFT' 30; letter-spacing: -0.035em; line-height: .92; margin: 0; }
+  .display em, em.it { font-style: italic; font-weight: 300; color: var(--sun); }
+  .mask { display: block; overflow: hidden; padding-bottom: .36em; margin-bottom: -.36em; }
+  .mask > span { display: block; }
+
+  #q { left: 80px; top: 690px; font-size: 118px; width: 920px; }
+  #q .l2 { padding-left: 60px; }
+
+  #ans .eyebrow { left: 84px; top: 712px; }
+  #num { left: 70px; top: 764px; font: 400 290px/.9 var(--mono); letter-spacing: -0.06em; color: var(--sun); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  #ans .lbl { left: 84px; top: 1080px; width: 860px; font: 400 40px/1.3 var(--sans); color: var(--on-ink-muted); }
+
+  #ring { left: 70px; top: 712px; width: 270px; height: 270px; }
+  #ring svg { position: absolute; inset: 0; }
+  #ring b { position: absolute; inset: 0; display: grid; place-items: center; font: 500 98px/1 var(--mono); letter-spacing: -0.05em; color: #0A251A; }
+  #score { color: #0A251A; }
+  #score .eyebrow, #score .reach { color: #4E6559; }
+  #score .eyebrow { left: 380px; top: 770px; }
+  #score .word { left: 376px; top: 812px; font: 400 110px/1 var(--display); letter-spacing: -0.02em; }
+  #score .water { left: 76px; top: 1040px; font-size: 128px; }
+  #score .reach { left: 84px; top: 1180px; font: 400 40px/1.3 var(--sans); color: var(--on-ink-muted); }
+
+  .row { left: 80px; display: flex; align-items: center; gap: 30px; transform-origin: 0 50%; }
+  .row svg { width: 74px; height: 74px; color: var(--sun); flex: none; }
+  .row span { font: 360 100px/1 var(--display); font-variation-settings: 'opsz' 144, 'SOFT' 30; letter-spacing: -0.03em; white-space: nowrap; }
+  .row span em { font-style: italic; font-weight: 300; color: var(--sun); }
+
+  #nav { left: 330px; top: 190px; font: 500 50px/1 var(--display); letter-spacing: -0.01em; color: var(--on-ink); white-space: nowrap; }
+  #nav em { font-style: italic; font-weight: 400; color: var(--on-ink); }
+  #hero .eyebrow { left: 84px; top: 440px; font-size: 24px; }
+  #head { left: 74px; top: 494px; font-size: 140px; width: 960px; }
+  #head .l1 { color: var(--on-ink); }
+  #head .l2 { padding-left: 40px; }
+
+  #plate { left: 40px; top: 1190px; width: 1000px; height: 760px; border-radius: 34px 34px 0 0; overflow: hidden; background: var(--plate); }
+  #plate img { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 62%; transform-origin: 50% 40%; }
+
+  #url { left: 80px; top: 858px; display: flex; align-items: center; gap: 30px; padding: 28px 36px 28px 38px; border-radius: 28px; background: var(--sun); color: var(--ink-deep); transform-origin: 0 50%; }
+  #url .t { font: 500 40px/1.28 var(--mono); letter-spacing: -0.01em; white-space: nowrap; }
+  #url svg { width: 56px; height: 56px; flex: none; }
 </style>
 </head>
 <body>
-<!--
-  huashu-motion contract (all optional, all plain HTML + GSAP):
-  1. Editable values are composition variables on <html>. The studio inspector edits their defaults.
-  2. data-om-id names things people can point at; comments arrive with the id under the pointer.
-  3. Timeline labels "scene:<id>" become the studio's scene strip.
-  No data-duration on the root: the film is as long as the timeline, so timing variables (endHold) can change it.
--->
-<div id="film" data-composition-id="film" data-width="1920" data-height="1080">
-  <div class="grain"></div>
+<div id="film" data-composition-id="film" data-width="1080" data-height="1920">
+  <audio id="om-sound" src="assets/sound.wav" data-start="0" data-duration="10.169" data-track-index="8" data-volume="1"></audio>
+  <div class="ground-storm" data-om-id="storm"></div>
+  <div class="ground-warm" data-om-id="warm"></div>
+  <div id="paper" data-om-id="paper"></div>
+  <div id="rain" data-om-id="rain"></div>
 
-  <section id="s-title">
-    <div class="kicker" data-om-id="kicker" data-var-text="kicker">HUASHU-MOTION</div>
-    <h1 class="title" data-om-id="title" data-om-var="title"></h1>
-    <div class="rule" data-om-id="rule"></div>
-    <div class="subtitle" data-om-id="subtitle" data-var-text="subtitle">对着画面指一下，就能改</div>
+  <!-- river artwork: the site's own plate, rising at the drop -->
+  <div id="plate" class="abs" data-om-id="artwork"><img src="assets/river-country.webp" alt=""></div>
+
+  <section id="q" class="abs display" data-om-id="question">
+    <span class="mask"><span class="l1" data-var-text="q1">Are the fish</span></span>
+    <span class="mask"><span class="l2"><em data-var-text="q2">in the river yet?</em></span></span>
   </section>
 
-  <section id="s-stat" class="stat" data-om-id="stat">
-    <span class="num" id="num">0</span>
-    <span class="lbl" data-var-text="statLabel">% 由代码生成，随时可改</span>
+  <section id="ans" data-om-id="count">
+    <div class="abs eyebrow" data-var-text="countEyebrow">Bonneville Dam · 7 days to Nov 3</div>
+    <div id="num" class="abs" data-om-var="count">4,496</div>
+    <div class="abs lbl" data-var-text="countText">adult Chinook, coho and steelhead counted climbing the ladder.</div>
   </section>
 
-  <section id="s-end" class="end" data-om-id="end"><span>made with <b>huashu-motion</b></span></section>
+  <section id="score" data-om-id="score">
+    <div id="ring" class="abs">
+      <svg viewBox="0 0 270 270"><circle cx="135" cy="135" r="114" fill="none" stroke="rgba(2,57,38,.12)" stroke-width="20"/>
+        <circle id="arc" cx="135" cy="135" r="114" fill="none" stroke="#023926" stroke-width="20" stroke-linecap="round" stroke-dasharray="716.3" stroke-dashoffset="716.3" transform="rotate(-90 135 135)"/></svg>
+      <b id="scoreNum" data-om-var="score">76</b>
+    </div>
+    <div class="abs eyebrow">Fishing score</div>
+    <div class="abs word" data-var-text="scoreWord">Good</div>
+    <h2 class="abs display water" data-var-text="water">Cowlitz River</h2>
+    <div class="abs reach" data-var-text="reach">Barrier Dam to Blue Creek</div>
+  </section>
+
+  <section id="rows" data-om-var="rows"></section>
+
+  <section id="hero" data-om-id="headline">
+    <div class="abs eyebrow" id="heroEyebrow" data-var-text="heroEyebrow">Oregon &amp; SW Washington · 31 reaches</div>
+    <h1 id="head" class="abs display">
+      <span class="mask"><span class="l1" data-var-text="head1">Read the river</span></span>
+      <span class="mask"><span class="l2"><em data-var-text="head2">before you drive.</em></span></span>
+    </h1>
+  </section>
+
+  <div id="nav" class="abs" data-om-id="wordmark">Oregon <em>Fish Forecast</em></div>
+
+  <div id="url" class="abs" data-om-id="address">
+    <div class="t"><div data-var-text="url1">kenny-yukich.github.io/</div><div data-var-text="url2">oregon-fish-forecast-concept</div></div>
+    <svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M18 15V6H9"/></svg>
+  </div>
+
+  <div id="fish" class="abs" data-om-id="fish">
+    <div id="fishSwim">
+      <div id="glowWrap"><div id="glow"></div></div>
+      <img src="assets/weather-fish.webp" alt="Oregon Fish Forecast">
+    </div>
+  </div>
 </div>
+
+<script type="text/vnd.abc" id="om-score">
+X:1
+T:Oregon Fish Forecast · Read the river (folk stomp, 118)
+M:4/4
+L:1/8
+Q:1/4=118
+K:C
+V:DR inst=drums kit=folk gain=0.95
+!mark:hook! !mp! C,,2 ^D,,2 C,,2 ^D,,2 | !mark:answer! !mf! C,,2 ^D,,2 C,, C,, ^D,,2 | !mark:burst! !f! !crescendo(! C,, ^D,, C,, ^D,, [C,,^D,,] ^D,, !crescendo)! !rise(! z2 | !rise)! !mark:drop! !hit! !ff! [C,,^C,]2 ^D,,2 C,,2 ^D,,2 | !mark:end! !mf! C,,2 ^D,,2 [C,,^C,]2 z2 |]
+V:SH inst=drums kit=folk gain=0.45
+!p! ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, | !mp! ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, | !f! ^F,,/^F,,/^F,,/^F,,/ ^F,,/^F,,/^F,,/^F,,/ ^F,,/^F,,/^F,,/^F,,/ z2 | !f! ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, | ^F,, ^F,, ^F,, ^F,, z4 |]
+V:GT inst=guitar gain=0.7
+!mp! [C,G,CEG]2 [C,G,CEG][C,G,CEG] z[C,G,CEG] [C,G,CEG]2 | !mf! [F,CFAc]2 [F,CFAc][F,CFAc] z[F,CFAc] [F,CFAc]2 | !f! [A,EAce]2 [A,EAce][A,EAce] [G,DGBd][G,DGBd] z2 | [K:D] !f! [D,A,DFA]2 [D,A,DFA][D,A,DFA] z[D,A,DFA] [D,A,DFA]2 | [G,DGBd]2 [G,DGBd][G,DGBd] [D,A,DFAd]4 |]
+V:UK inst=uke gain=0.45
+z8 | !mp! z[FAc] z[FAc] z[FAc] z[FAc] | !f! z[Ace] z[Ace] z[GBd] z2 | [K:D] z[DFA] z[DFA] z[DFA] z[DFA] | z[GBd] z[GBd] z4 |]
+V:BS inst=bass gain=0.75
+!mp! C,,4 C,,4 | !mf! F,,2 F,,F,, F,,2 C,2 | !f! A,,2 A,,A,, G,,2 z2 | [K:D] !f! D,,2 D,,D,, D,,2 A,,2 | G,,2 G,,2 D,,4 |]
+V:GL inst=glock role=melody gain=0.6
+!mf! G c d e3 z2 | z4 e d c2 | z8 | [K:D] !f! A d e f3 z2 | A d e a5 |]
+V:ST inst=strings gain=0.4
+z8 | z8 | z8 | [K:D] !mp! [DFAd]8 | [DGBd]4 [DFAd]4 |]
+</script>
 
 <script>
   const V = OM.vars();
-  const esc = (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' })[c] || c;
-  const title = document.querySelector('.title');
-  // Each character sits in its own mask so it can rise into place; spaces keep their width.
-  title.innerHTML = [...V.title].map((c) => c === ' ' ? ' ' : `<span class="mask"><span class="ch">${esc(c)}</span></span>`).join('');
+  OM.music({ bpm: 118 });
+  const B = (n) => OM.beat(n);
+  const $ = (s) => document.querySelector(s);
+  const esc = (s) => String(s).replace(/[<>&]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' })[c]);
 
-  const tl = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
+  // ---- rain behind the fish: seeded, so every frame is the same every time
+  const rnd = OM.random(7);
+  const rain = $('#rain');
+  for (let i = 0; i < 90; i++) {
+    const s = document.createElement('i');
+    const h = 70 + rnd() * 110;
+    s.style.cssText = `left:${(rnd() * 1500).toFixed(0)}px; top:${(rnd() * 2800).toFixed(0)}px; height:${h.toFixed(0)}px; opacity:${(.35 + rnd() * .65).toFixed(2)}`;
+    rain.appendChild(s);
+  }
 
-  tl.addLabel('scene:title', 0)
-    .fromTo('.kicker', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: .6 }, .15)
-    .fromTo('.title .ch', { yPercent: 110 }, { yPercent: 0, duration: .9, stagger: .045, ease: 'expo.out' }, .25)
-    .fromTo('.rule', { scaleX: 0 }, { scaleX: 1, duration: .9, ease: 'expo.inOut' }, .9)
-    .fromTo('.subtitle', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: .7 }, 1.25)
-    .to('#s-title', { opacity: 0, y: -40, duration: .5, ease: 'power2.in' }, 3.1);
+  // ---- the four inputs, last word italic in sun (the site's accent-phrase habit)
+  const ICONS = [
+    '<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M4 8C4 5.17157 4 3.75736 4.87868 2.87868C5.75736 2 7.17157 2 10 2H14C16.8284 2 18.2426 2 19.1213 2.87868C20 3.75736 20 5.17157 20 8V16C20 18.8284 20 20.2426 19.1213 21.1213C18.2426 22 16.8284 22 14 22H10C7.17157 22 5.75736 22 4.87868 21.1213C4 20.2426 4 18.8284 4 16V8Z"/><path d="M19.9997 16H7.89749C6.96751 16 6.50253 16 6.12103 16.1022C5.08575 16.3796 4.29986 17.1212 4.02246 18.1564"/><path d="M8 7H16"/><path d="M8 10.5H13"/><path d="M19.9239 19H8"/></g>',
+    '<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M3 13.1928C3 18.0569 6.85549 22 11.6115 22H12.3885C17.1445 22 21 18.0569 21 13.1928V12.9281C21 8.31651 18.2715 4.16347 14.0967 2.42077C12.7527 1.85974 11.2473 1.85974 9.90329 2.42077C5.72854 4.16347 3 8.31651 3 12.9281V13.1928Z"/><path d="M7.61475 10.7237C8.2495 8.71826 9.63062 7.08805 11.3858 6.27637"/></g>',
+    '<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12Z"/><path stroke-linejoin="round" d="M7 14L9.29289 11.7071C9.68342 11.3166 10.3166 11.3166 10.7071 11.7071L12.2929 13.2929C12.6834 13.6834 13.3166 13.6834 13.7071 13.2929L17 10M14.5 10H17V12.5"/></g>',
+    '<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M2 12C2 8.22876 2 6.34315 3.17157 5.17157C4.34315 4 6.22876 4 10 4H14C17.7712 4 19.6569 4 20.8284 5.17157C22 6.34315 22 8.22876 22 12V14C22 17.7712 22 19.6569 20.8284 20.8284C19.6569 22 17.7712 22 14 22H10C6.22876 22 4.34315 22 3.17157 20.8284C2 19.6569 2 17.7712 2 14V12Z"/><path d="M7 4V2.5"/><path d="M17 4V2.5"/><path d="M2.5 9H21.5"/><path stroke-linejoin="round" d="M17 13H17.0001"/><path stroke-linejoin="round" d="M12 13H12.0001"/><path stroke-linejoin="round" d="M7 13H7.0001"/><path stroke-linejoin="round" d="M17 17.0234H17.0001"/><path stroke-linejoin="round" d="M12 17.0234H12.0001"/><path stroke-linejoin="round" d="M7 17.0234H7.0001"/></g>'
+  ];
+  const ROW_TOP = [712, 846, 980, 1114];
+  const words = String(V.rows).split('|').slice(0, 4);
+  $('#rows').innerHTML = words.map((w, i) => {
+    const parts = w.trim().split(' ');
+    const last = parts.pop();
+    return `<div class="abs row" data-om-id="input-${i + 1}" style="top:${ROW_TOP[i]}px"><svg viewBox="0 0 24 24">${ICONS[i]}</svg><span>${esc(parts.join(' '))} <em>${esc(last)}</em></span></div>`;
+  }).join('');
+  const rows = gsap.utils.toArray('.row');
+  gsap.set('#rows', { transformOrigin: '8% 48%' });
 
+  const fmt = (n) => Math.round(n).toLocaleString('en-US');
+  $('#num').textContent = fmt(V.count);
+  $('#scoreNum').textContent = String(V.score);
+
+  // ---- hidden until their moment
+  gsap.set(['#q .mask > span', '#ans', '#score', '#hero .eyebrow', '#nav', '#url'], { autoAlpha: 0 });
+  gsap.set('#q .mask > span', { autoAlpha: 1, yPercent: 160 });
+  gsap.set('#head .mask > span', { yPercent: 160 });
+  gsap.set(rows, { autoAlpha: 0 });
+  gsap.set('#plate', { y: 820 });
+  gsap.set(['#q', '#hero', '#paper'], { autoAlpha: 0 });
+
+  // fish poses (x, y offsets from the base centre (540, 419), scale against 700 px)
+  const POSE = {
+    storm: { x: 156, y: 447, scale: 2.15, rotation: -8 },   // the storm over the fish's back at centre frame
+    sun:   { x: -545, y: 419, scale: 2.0, rotation: -4 },   // the sun at its head at centre frame
+    top:   { x: 0, y: 0, scale: 1, rotation: -3 },          // the anchor at the top
+    nav:   { x: -360, y: -199, scale: 0.2857, rotation: 0 } // the site's nav mark
+  };
+  gsap.set('#fish', POSE.storm);
+  gsap.set('#glowWrap', { scale: 0, autoAlpha: 0 });
+
+  const tl = gsap.timeline({ paused: true, defaults: { ease: 'expo.out' } });
+
+  // ================= hook: storm to sun along the fish's own body
+  tl.addLabel('scene:hook', 0);
+  tl.to('#fish', { ...POSE.sun, duration: B(1.5), ease: 'expo.inOut' }, 0);
+  OM.sfx('whoosh', B(.75), { gain: .5 });
+  tl.fromTo('#rain', { x: 0, y: 0 }, { x: -260, y: 900, duration: B(2.4), ease: 'none' }, 0);
+  tl.to('#rain', { autoAlpha: 0, duration: B(.8), ease: 'power2.in' }, B(.9));
+  tl.to('.ground-storm', { autoAlpha: 0, duration: B(1.5), ease: 'power1.inOut' }, B(.8));
+  tl.to('.ground-warm', { autoAlpha: 1, duration: B(1.5), ease: 'power1.inOut' }, B(1.2));
+  tl.to('#glowWrap', { scale: 1, autoAlpha: 1, duration: B(1), ease: 'expo.out' }, B(1.5));
+  OM.sfx('sparkle', B(1.5), { gain: .55 });
+  // hard pull-out to the anchor
+  tl.to('#fish', { ...POSE.top, duration: B(1), ease: 'expo.out' }, B(2));
+  tl.to('#glowWrap', { autoAlpha: .55, duration: B(1) }, B(2.2));
+  tl.to('#plate', { y: 500, duration: B(2), ease: 'expo.out' }, B(2));
+  OM.sfx('whoosh', B(2) + .05, { gain: .42, pan: -.2 });
+  tl.set('#q', { autoAlpha: 1 }, B(2.2));
+  tl.to('#q .l1', { yPercent: 0, duration: B(1) }, B(2.2));
+  tl.to('#q .l2', { yPercent: 0, duration: B(1) }, B(2.6));
+
+  // small life: the fish swims on the spot from the pull-out until the stop
+  tl.to('#fishSwim', { y: 9, rotation: 1.6, duration: B(2.25), ease: 'sine.inOut', repeat: 3, yoyo: true }, B(2.5));
+
+  // ================= answer: 4,496, then the score
+  tl.addLabel('scene:answer', B(4));
+  tl.set('#q', { autoAlpha: 0 }, B(4));
+  tl.set('#ans', { autoAlpha: 1 }, B(4));
+  OM.sfx('hit', B(4), { gain: .55 });
+  tl.fromTo('#ans', { scale: 1.06, transformOrigin: '0% 40%' }, { scale: 1, duration: B(2), ease: 'power2.out' }, B(4));
   const counter = { v: 0 };
-  tl.addLabel('scene:stat', 3.4)
-    .fromTo('#s-stat', { opacity: 0 }, { opacity: 1, duration: .3 }, 3.4)
-    .fromTo('.stat .lbl', { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: .6 }, 3.7)
-    .fromTo(counter, { v: 0 }, { v: V.stat, duration: 1.3, ease: 'expo.out',
-        onUpdate: () => { document.getElementById('num').textContent = Math.round(counter.v); } }, 3.4)
-    .to('#s-stat', { opacity: 0, scale: .96, duration: .45, ease: 'power2.in' }, 5.8);
+  tl.fromTo(counter, { v: 0 }, { v: V.count, duration: B(1.15), ease: 'expo.out',
+    onUpdate: () => { $('#num').textContent = fmt(counter.v); } }, B(4));
+  tl.fromTo('#ans .lbl', { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: B(1) }, B(4.4));
+  tl.fromTo('#num', { scale: 1.35, transformOrigin: '0% 55%' }, { scale: 1, duration: B(1.3), ease: 'expo.out' }, B(4));
+  OM.sfx('count', B(4.9), { gain: .45 });
 
-  tl.addLabel('scene:end', 6.3)
-    .fromTo('.end span', { opacity: 0, y: 24, scale: .96 }, { opacity: 1, y: 0, scale: 1, duration: 1.1, ease: 'expo.out' }, 6.3)
-    .to({}, { duration: V.endHold }); // the closing hold; the film ends when the timeline does
+  tl.set('#ans', { autoAlpha: 0 }, B(6));
+  tl.set('#score', { autoAlpha: 1 }, B(6));
+  tl.set('#paper', { autoAlpha: 1 }, B(6));
+  tl.set('#glowWrap', { autoAlpha: 0 }, B(6));
+  tl.fromTo('#ring', { scale: 1.35, transformOrigin: '50% 50%' }, { scale: 1, duration: B(1.2), ease: 'expo.out' }, B(6));
+  OM.sfx('hit', B(6), { gain: .5, pan: .15 });
+  tl.fromTo('#score', { scale: 1.06, transformOrigin: '0% 40%' }, { scale: 1, duration: B(2), ease: 'power2.out' }, B(6));
+  const sc = { v: 0 };
+  tl.fromTo(sc, { v: 0 }, { v: V.score, duration: B(1.1), ease: 'expo.out',
+    onUpdate: () => { $('#scoreNum').textContent = String(Math.round(sc.v)); $('#arc').setAttribute('stroke-dashoffset', (716.3 * (1 - sc.v / 100)).toFixed(1)); } }, B(6));
+  tl.fromTo('#score .water', { autoAlpha: 0, x: 60 }, { autoAlpha: 1, x: 0, duration: B(1) }, B(6.5));
+  tl.fromTo('#score .reach', { autoAlpha: 0, x: 60 }, { autoAlpha: 1, x: 0, duration: B(1) }, B(6.8));
+  OM.sfx('thud', B(7), { gain: .55 });
+
+  // ================= burst: the four inputs stack on the beat (1, 1, 1, ½)
+  tl.addLabel('scene:burst', B(8));
+  tl.set('#score', { autoAlpha: 0 }, B(8));
+  tl.set('#paper', { autoAlpha: 0 }, B(8));
+  tl.set('#glowWrap', { autoAlpha: .55 }, B(8));
+  const ROW_AT = [8, 9, 10, 10.5];
+  rows.forEach((el, i) => {
+    tl.fromTo(el, { autoAlpha: 0, x: 90, scale: 1.12 }, { autoAlpha: 1, x: 0, scale: 1, duration: B(.6), ease: 'expo.out', immediateRender: false }, B(ROW_AT[i]));
+    OM.sfx('pop', B(ROW_AT[i]), { gain: .5, note: [1, 2, 3, 5][i], pan: -.15 + i * .1 });
+    tl.to('#rows', { scale: 1 + (i + 1) * .035, duration: B(.4), ease: 'expo.out' }, B(ROW_AT[i]));
+    tl.fromTo('#fishSwim img', { y: -22 }, { y: 0, duration: B(.45), ease: 'power2.out', immediateRender: false }, B(ROW_AT[i]));
+  });
+  // the stop: every row flies into the fish's sun, then nothing moves for half a beat
+  const SUN = { x: 813, y: 405 };
+  rows.forEach((el, i) => {
+    const cy = ROW_TOP[i] + 50;
+    tl.to(el, { x: SUN.x - 300, y: SUN.y - cy, scale: .04, autoAlpha: 0, duration: B(.5), ease: 'power3.in' }, B(11) + (3 - i) * .025);
+  });
+  OM.sfx('slide', B(11.35), { gain: .4 });
+  tl.to('#glowWrap', { scale: 1.35, autoAlpha: 1, duration: B(.5), ease: 'power2.in' }, B(11.3));
+
+  // ================= drop: the site's hero, rebuilt for the phone
+  tl.addLabel('scene:drop', B(12));
+  tl.set('#hero', { autoAlpha: 1 }, B(12));
+  tl.to('#fish', { ...POSE.nav, duration: B(1.4), ease: OM.spring(0.12) }, B(12));
+  tl.to('#glowWrap', { autoAlpha: 0, duration: B(.6) }, B(12));
+  tl.to('#plate', { y: 0, duration: B(1.8), ease: 'expo.out' }, B(12));
+  tl.fromTo('#plate img', { scale: 1.14 }, { scale: 1, duration: B(8), ease: 'power1.out' }, B(12));
+  tl.fromTo('#hero', { scale: 1 }, { scale: 1.035, transformOrigin: '0% 40%', duration: B(7), ease: 'none', immediateRender: false }, B(13));
+  tl.fromTo('#head .l1', { yPercent: 160 }, { yPercent: 0, duration: B(.9), ease: 'expo.out', immediateRender: false }, B(12));
+  tl.fromTo('#head', { scale: 1.08, transformOrigin: '0% 50%' }, { scale: 1, duration: B(1.4), ease: 'expo.out' }, B(12));
+  OM.sfx('impact', B(12), { gain: .7 });
+  tl.fromTo('#hero .eyebrow', { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: B(1), immediateRender: false }, B(12.5));
+  tl.fromTo('#nav', { autoAlpha: 0, x: -24 }, { autoAlpha: 1, x: 0, duration: B(1), immediateRender: false }, B(12.6));
+  tl.fromTo('#head .l2', { yPercent: 160 }, { yPercent: 0, duration: B(.9), ease: 'expo.out', immediateRender: false }, B(13));
+  OM.sfx('whoosh', B(13), { gain: .35, pan: .2 });
+
+  // ================= end: the address
+  tl.addLabel('scene:end', B(16));
+  tl.to('#hero', { y: -36, duration: B(1), ease: 'expo.out' }, B(16));
+  tl.fromTo('#url', { autoAlpha: 0, y: 60, scale: .92 }, { autoAlpha: 1, y: 0, scale: 1, duration: B(1.2), ease: 'back.out(1.5)', immediateRender: false }, B(16));
+  OM.sfx('pop', B(16) + .06, { gain: .5, note: 5 });
+  OM.sfx('chime', B(17), { gain: .45 });
+  tl.to({}, { duration: B(20) - tl.duration() > 0 ? B(20) - tl.duration() : 0 }, tl.duration()); // run to beat 20
 
   window.__timelines['film'] = tl;
 </script>
