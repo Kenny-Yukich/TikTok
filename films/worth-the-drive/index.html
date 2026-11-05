@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en" data-composition-variables='[
+  {"id":"eyebrow","type":"string","label":"Eyebrow","default":"Top Oregon scores today","group":"Hook"},
+  {"id":"q1","type":"string","label":"Title, line 1","default":"Worth the","group":"Hook"},
+  {"id":"q2","type":"string","label":"Title, line 2 (italic)","default":"drive this week.","group":"Hook"},
+  {"id":"cards","type":"string","label":"Waters (JSON, read from the site; Oregon only)","default":"[{\"score\":72,\"label\":\"Good\",\"conf\":\"Medium confidence\",\"name\":\"Crooked River\",\"reach\":\"Bowman Dam to Castle Rock Campground\",\"quote\":\"ODFW reports strong trout/whitefish fishing and reduced autumn flows.\",\"foot\":\"Central Oregon · Reported Oct 8\"},{\"score\":70,\"label\":\"Good\",\"conf\":\"Medium confidence\",\"name\":\"Diamond Lake\",\"reach\":\"Lake Creek and north-shore area\",\"quote\":\"ODFW reports good trout catches, with brown and tiger trout released.\",\"foot\":\"Southern Cascades · Reported Oct 7\"},{\"score\":70,\"label\":\"Good\",\"conf\":\"Medium confidence\",\"name\":\"Lower Deschutes\",\"reach\":\"Warm Springs to Trout Creek\",\"tag\":\"Trout-only score\",\"quote\":\"ODFW reports good trout fishing.\",\"foot\":\"Central Oregon · Reported Oct 5\"}]","group":"Data"},
+  {"id":"tag1","type":"string","label":"End line 1","default":"Read the river","group":"End"},
+  {"id":"tag2","type":"string","label":"End line 2 (italic)","default":"before you drive.","group":"End"},
+  {"id":"url1","type":"string","label":"Address","default":"ORFishForecast.com","group":"End"}
+]'>
+<head>
+<meta charset="utf-8">
+<title>Oregon Fish Forecast · Worth the drive</title>
+<script src="vendor/gsap.min.js"></script>
+<script src="vendor/om.js"></script>
+<style id="om-fonts">
+@font-face { font-family: "Fraunces"; src: url("assets/fonts/Fraunces-full.woff2") format("woff2"); font-weight: 100 900; font-style: normal; }
+@font-face { font-family: "Fraunces"; src: url("assets/fonts/Fraunces-full-italic.woff2") format("woff2"); font-weight: 100 900; font-style: italic; }
+@font-face { font-family: "Instrument Sans"; src: url("assets/fonts/InstrumentSans-wght.woff2") format("woff2"); font-weight: 400 700; font-style: normal; }
+@font-face { font-family: "JetBrains Mono"; src: url("assets/fonts/JetBrainsMono-wght.woff2") format("woff2"); font-weight: 100 800; font-style: normal; }
+</style>
+<style>
+  :root { --ink: #023926; --ink-deep: #001F13; --on-ink: #ECF1E2; --on-ink-muted: #A8BEAC; --sun: #F8E532; --plate: #F9F7EE;
+          --paper: #F9F7EE; --text: #0A251A; --muted: #4E6559; --alert: #C2561C;
+          --display: 'Fraunces', Georgia, serif; --sans: 'Instrument Sans', sans-serif; --mono: 'JetBrains Mono', monospace; }
+  html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: var(--ink-deep); }
+  #film { position: relative; width: 1080px; height: 1920px; overflow: hidden; color: var(--on-ink); font-family: var(--sans);
+          background: radial-gradient(900px 800px at 70% 30%, rgba(46, 96, 52, .5), transparent 70%), linear-gradient(180deg, var(--ink-deep), #00261A 60%, #002A1C); -webkit-font-smoothing: antialiased; }
+  .abs { position: absolute; }
+  .eyebrow { font: 500 26px/1.3 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--on-ink-muted); }
+  .display { font-family: var(--display); font-weight: 360; font-variation-settings: 'opsz' 144, 'SOFT' 30; letter-spacing: -0.035em; line-height: .92; margin: 0; }
+  .display em { font-style: italic; font-weight: 300; color: var(--sun); }
+  .mask { display: block; overflow: hidden; padding-bottom: .36em; margin-bottom: -.36em; }
+  .mask > span { display: block; }
+
+  #hook { position: absolute; inset: 0; }
+  #hook .eyebrow { left: 84px; top: 300px; }
+  #q { left: 74px; top: 350px; font-size: 128px; width: 960px; }
+  #q .l2 { padding-left: 40px; }
+  #sfish { left: 0; top: 150px; width: 260px; height: 126px; }
+  #sfish img { width: 100%; height: 100%; filter: drop-shadow(0 12px 16px rgba(0, 12, 6, .5)); }
+
+  /* the site's score card, at phone scale */
+  .card { position: absolute; left: 80px; top: 300px; width: 920px; height: 1120px; border-radius: 44px; background: var(--paper); color: var(--text);
+          box-shadow: 0 40px 80px rgba(0, 10, 4, .45); transform-origin: 50% 60%; }
+  .card .ring { position: absolute; left: 60px; top: 60px; width: 220px; height: 220px; }
+  .card .ring svg { position: absolute; inset: 0; }
+  .card .ring b { position: absolute; inset: 0; display: grid; place-items: center; font: 500 80px/1 var(--mono); letter-spacing: -0.05em; }
+  .card .meta { position: absolute; left: 316px; top: 84px; }
+  .card .meta small { display: block; font: 500 22px/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .card .meta strong { display: block; font: 400 84px/1.05 var(--display); letter-spacing: -0.02em; margin: 2px 0 4px; }
+  .card h2 { position: absolute; left: 58px; top: 330px; margin: 0; font: 400 104px/1 var(--display); letter-spacing: -0.025em; white-space: nowrap; }
+  .card .reach { position: absolute; left: 62px; top: 450px; width: 800px; font: 400 38px/1.3 var(--sans); color: var(--muted); }
+  .card .tag { position: absolute; left: 62px; top: 520px; display: flex; align-items: center; gap: 12px; font: 500 26px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--alert); }
+  .card .tag svg { width: 34px; height: 34px; }
+  .card q { position: absolute; left: 60px; top: 610px; width: 800px; font: italic 400 58px/1.2 var(--display); letter-spacing: -0.01em; quotes: none; }
+  .card .foot { position: absolute; left: 62px; bottom: 60px; font: 400 26px var(--mono); color: var(--muted); }
+  .card .go { position: absolute; right: 56px; bottom: 44px; width: 84px; height: 84px; border-radius: 50%; background: var(--ink); color: var(--on-ink); display: grid; place-items: center; }
+  .card .go svg { width: 40px; height: 40px; }
+
+  /* end card */
+  #plate { left: 40px; top: 1190px; width: 1000px; height: 760px; border-radius: 34px 34px 0 0; overflow: hidden; background: var(--plate); }
+  #plate img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 62%; transform-origin: 50% 40%; }
+  #end { position: absolute; inset: 0; text-align: center; }
+  #efish { left: 330px; top: 250px; width: 420px; height: 203px; }
+  #efish img { width: 100%; height: 100%; filter: drop-shadow(0 24px 30px rgba(0, 12, 6, .55)); }
+  #word { left: 0; width: 1080px; top: 490px; font: 500 58px/1 var(--display); letter-spacing: -0.01em; }
+  #word em { font-style: italic; font-weight: 400; }
+  #tag { left: 0; width: 1080px; top: 590px; font-size: 92px; }
+  #url { left: 50%; top: 880px; display: flex; align-items: center; gap: 28px; padding: 30px 40px 30px 44px; border-radius: 999px; background: var(--sun); color: var(--ink-deep); white-space: nowrap; }
+  #url .t { font: 600 60px/1.1 var(--sans); letter-spacing: -0.015em; }
+  #url svg { width: 60px; height: 60px; flex: none; }
+</style>
+</head>
+<body>
+<div id="film" data-composition-id="film" data-width="1080" data-height="1920">
+  <audio id="om-sound" src="assets/sound.wav" data-start="0" data-duration="14.464" data-track-index="8" data-volume="1"></audio>
+  <div id="plate" class="abs" data-om-id="artwork"><img src="assets/river-country.webp" alt=""></div>
+
+  <section id="hook" data-om-id="title">
+    <div id="sfish" class="abs" data-om-id="fish"><img src="assets/weather-fish.webp" alt=""></div>
+    <div class="abs eyebrow" data-var-text="eyebrow">Top Oregon scores today</div>
+    <h1 id="q" class="abs display">
+      <span class="mask"><span class="l1" data-var-text="q1">Worth the</span></span>
+      <span class="mask"><span class="l2"><em data-var-text="q2">drive this week.</em></span></span>
+    </h1>
+  </section>
+
+  <div id="deck"></div>
+
+  <section id="end" data-om-id="end">
+    <div id="efish" class="abs" data-om-id="end-fish"><img src="assets/weather-fish.webp" alt="Oregon Fish Forecast"></div>
+    <div id="word" class="abs" data-om-id="wordmark">Oregon <em>Fish Forecast</em></div>
+    <h2 id="tag" class="abs display" data-om-id="tagline"><span data-var-text="tag1">Read the river</span><br><em data-var-text="tag2">before you drive.</em></h2>
+    <div id="url" class="abs" data-om-id="address"><div class="t" data-var-text="url1">ORFishForecast.com</div>
+      <svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M18 15V6H9"/></svg></div>
+  </section>
+</div>
+
+<script type="text/vnd.abc" id="om-score">
+X:1
+T:Oregon Fish Forecast · Worth the drive (piano and flute, 112)
+M:4/4
+L:1/8
+Q:1/4=112
+K:D
+V:PN inst=piano gain=0.7
+!mark:hook! !p! D,A,DF AFDA, | [M:2/4] D,A,DF | [M:5/4] !mark:c1! !mp! B,,F,B,D FDB,F, B,D | !mark:c2! !mf! G,,D,G,B, DB,G,D, G,B, | !mark:c3! !f! A,,E,A,C ECA,E, z2 | [M:4/4] !mark:end! !ff! D,A,DF AFDA, | [M:2/4] [D,A,DF]4 |]
+V:FL inst=flute role=melody gain=0.55
+z8 | [M:2/4] z4 | [M:5/4] !mp! d4 c2 B4 | B4 A2 G4 | !mf! A4 c2 e2 z2 | [M:4/4] !f! f4 e4 | [M:2/4] d4 |]
+V:CE inst=celli gain=0.5
+!pp! D,,8 | [M:2/4] D,,4 | [M:5/4] !p! B,,10 | !mp! G,,10 | !mf! A,,8 z2 | [M:4/4] !ff! D,,8 | [M:2/4] D,,4 |]
+V:DR inst=drums kit=lofi gain=0.9
+!p! C,,2 z2 D,,2 z2 | [M:2/4] C,,2 D,,2 | [M:5/4] !mp! C,,2 D,,2 C,, C,, D,,2 C,,2 | !mf! C,,2 D,,2 C,, C,, D,,2 C,,2 | !f! C,,2 D,,2 C,, C,, D,, D,, !rise(! z2 | [M:4/4] !rise)! !hit! !ff! [C,,^C,]2 D,,2 C,,2 D,,2 | [M:2/4] [C,,^C,]2 z2 |]
+V:HH inst=drums kit=lofi gain=0.35
+^F,,2 ^F,,2 ^F,,2 ^F,,2 | [M:2/4] ^F,,2 ^F,,2 | [M:5/4] ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, | ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, | ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, z2 | [M:4/4] ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, | [M:2/4] z4 |]
+V:GL inst=glock gain=0.55
+z8 | [M:2/4] z4 | [M:5/4] a2 z8 | b2 z8 | c'2 z8 | [M:4/4] z2 A d e a3 | [M:2/4] z4 |]
+</script>
+
+<script>
+  const V = OM.vars();
+  OM.music({ bpm: 112 });
+  const B = (n) => OM.beat(n);
+  const $ = (s) => document.querySelector(s);
+  const esc = (s) => String(s).replace(/[<>&]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' })[c]);
+  const ARROW = '<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M4 12H20M14 18L20 12L14 6"/>';
+  const ALERT = '<g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5.312 10.762C8.23 5.587 9.689 3 12 3c2.31 0 3.77 2.587 6.688 7.762l.364.644c2.425 4.3 3.638 6.45 2.542 8.022S17.786 21 12.364 21h-.728c-5.422 0-8.134 0-9.23-1.572s.117-3.722 2.542-8.022z"/><path stroke-linecap="round" d="M12 8v5"/><circle cx="12" cy="16" r="1" fill="currentColor"/></g>';
+
+  // ---- the cards, rebuilt from the site's homepage pick cards
+  const C = JSON.parse(V.cards);
+  $('#deck').innerHTML = C.map((c, k) =>
+    `<div class="card" data-om-id="card-${k + 1}" data-layout-allow-occlusion data-layout-allow-overlap data-layout-allow-overflow style="z-index:${10 - k}">` +
+    `<div class="ring"><svg viewBox="0 0 220 220"><circle cx="110" cy="110" r="92" fill="none" stroke="rgba(2,57,38,.12)" stroke-width="18"/>` +
+    `<circle class="arc" cx="110" cy="110" r="92" fill="none" stroke="#023926" stroke-width="18" stroke-linecap="round" stroke-dasharray="578" stroke-dashoffset="${(578 * (1 - c.score / 100)).toFixed(1)}" transform="rotate(-90 110 110)"/></svg><b>${c.score}</b></div>` +
+    `<div class="meta"><small>Fishing score</small><strong>${esc(c.label)}</strong><small>${esc(c.conf)}</small></div>` +
+    `<h2>${esc(c.name)}</h2><div class="reach">${esc(c.reach)}</div>` +
+    (c.tag ? `<div class="tag"><svg viewBox="0 0 24 24">${ALERT}</svg>${esc(c.tag)}</div>` : '') +
+    `<q>${esc(c.quote)}</q><div class="foot">${esc(c.foot)}</div><div class="go"><svg viewBox="0 0 24 24">${ARROW}</svg></div></div>`).join('');
+  const cards = gsap.utils.toArray('.card');
+  const DECK = [{ x: -20, y: 900, rotation: -6 }, { x: 40, y: 960, rotation: 4 }, { x: 90, y: 1010, rotation: 10 }];
+  cards.forEach((el, k) => gsap.set(el, DECK[k]));
+
+  // ---- hidden until their moment
+  gsap.set('#q .l2', { yPercent: 160 });
+  gsap.set('#end', { autoAlpha: 0 });
+  gsap.set('#plate', { y: 820 });
+  gsap.set('#url', { xPercent: -50 });
+  gsap.set('#sfish', { x: 1120, rotation: 0 });
+
+  const tl = gsap.timeline({ paused: true, defaults: { ease: 'expo.out' } });
+
+  // ================= hook (beats 0–6): the deck rises, the fish swims across
+  tl.addLabel('scene:hook', 0);
+  tl.to('#q .l2', { yPercent: 0, duration: B(1) }, B(.5));
+  tl.fromTo('#q', { scale: 1 }, { scale: 1.04, transformOrigin: '0% 50%', duration: B(6), ease: 'none', immediateRender: false }, 0);
+  cards.forEach((el, k) => tl.fromTo(el, { y: DECK[k].y + 260 }, { y: DECK[k].y - 60, duration: B(5.5), ease: 'sine.out', immediateRender: false }, 0));
+  tl.fromTo('#sfish', { x: 1120 }, { x: -320, duration: B(5.6), ease: 'none', immediateRender: false }, 0);
+  tl.fromTo('#sfish', { y: 0 }, { y: -26, duration: B(1.4), ease: 'sine.inOut', repeat: 3, yoyo: true, immediateRender: false }, 0);
+  OM.sfx('slide', B(.2), { gain: .3 });
+
+  // ================= cards (beats 6–21): one dealt per 5/4 bar, the last swiped away
+  const deal = (k, at) => {
+    const el = cards[k];
+    tl.to(el, { x: 0, y: 0, rotation: 0, scale: 1, duration: B(1.1), ease: 'expo.out' }, at);
+    // the number stays the real score the whole time; the ring redraws and pulses as the card lands
+    const arc = el.querySelector('.arc');
+    const c = { v: 0 };
+    tl.fromTo(c, { v: 0 }, { v: C[k].score, duration: B(1.4), ease: 'expo.out', immediateRender: false,
+      onUpdate: () => { arc.setAttribute('stroke-dashoffset', (578 * (1 - c.v / 100)).toFixed(1)); } }, at + B(.3));
+    tl.fromTo(el.querySelector('.ring'), { scale: 1.18 }, { scale: 1, duration: B(1), ease: 'back.out(2)', immediateRender: false }, at + B(.3));
+    tl.fromTo(el.querySelector('q'), { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: B(1), immediateRender: false }, at + B(.8));
+    tl.fromTo(el, { scale: 1 }, { scale: 1.025, duration: B(4), ease: 'none', immediateRender: false }, at + B(1.1));
+    OM.sfx('paper', at, { gain: .5, pan: .2 });
+    OM.sfx('thud', at + B(.5), { gain: .4 });
+  };
+  const swipe = (k, at) => {
+    tl.to(cards[k], { x: -1300, rotation: -16, duration: B(.8), ease: 'expo.in' }, at - B(.8));
+    OM.sfx('whoosh', at - B(.1), { gain: .4, pan: -.4 });
+  };
+  tl.addLabel('scene:c1', B(6));
+  tl.to('#hook', { y: -220, autoAlpha: 0, duration: B(.6), ease: 'power2.in' }, B(5.5));
+  // waiting cards drop low, so only their tops peek under the card being read
+  const WAIT = [null, { x: 40, y: 1330, rotation: 4 }, { x: 90, y: 1390, rotation: 9 }];
+  cards.slice(1).forEach((el, k) => tl.to(el, { ...WAIT[k + 1], duration: B(1) }, B(6)));
+  deal(0, B(6));
+  tl.addLabel('scene:c2', B(11));
+  swipe(0, B(11));
+  deal(1, B(11));
+  tl.to(cards[2], { x: 40, y: 1330, rotation: 4, duration: B(1) }, B(11));
+  tl.addLabel('scene:c3', B(16));
+  swipe(1, B(16));
+  deal(2, B(16));
+  OM.sfx('pop', B(16.6), { gain: .4, note: 5 });
+
+  // ================= end (beats 21–27)
+  tl.addLabel('scene:end', B(21));
+  swipe(2, B(21));
+  tl.set(cards, { autoAlpha: 0 }, B(21));
+  tl.set('#end', { autoAlpha: 1 }, B(21));
+  tl.fromTo('#efish', { y: 700, rotation: -30, scale: .7 }, { y: 0, rotation: 0, scale: 1, duration: B(1.4), ease: OM.spring(0.14), immediateRender: false }, B(21));
+  tl.to('#plate', { y: 0, duration: B(1.8) }, B(21));
+  tl.fromTo('#plate img', { scale: 1.14 }, { scale: 1, duration: B(6), ease: 'power1.out' }, B(21));
+  OM.sfx('sparkle', B(21.7), { gain: .45 });
+  tl.fromTo('#word', { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: B(1), immediateRender: false }, B(21.6));
+  tl.fromTo('#tag', { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: B(1), immediateRender: false }, B(22));
+  tl.fromTo('#url', { autoAlpha: 0, y: 60, scale: .9 }, { autoAlpha: 1, y: 0, scale: 1, duration: B(1.2), ease: 'back.out(1.5)', immediateRender: false }, B(23));
+  OM.sfx('pop', B(23) + .06, { gain: .5, note: 5 });
+  tl.fromTo('#end', { scale: 1 }, { scale: 1.03, transformOrigin: '50% 35%', duration: B(5), ease: 'none', immediateRender: false }, B(22));
+  tl.to({}, { duration: Math.max(0, B(27) - tl.duration()) }, tl.duration());
+
+  window.__timelines['film'] = tl;
+</script>
+</body>
+</html>
