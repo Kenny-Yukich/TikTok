@@ -29,3 +29,28 @@ git -C /tmp/huashu-motion archive HEAD cli studio runtime templates fonts exampl
 ```
 
 Then update the commit hash above.
+
+### take-one
+
+[Take One](https://github.com/talsiach/take-one) (MIT, a few files Apache 2.0; see its `THIRD_PARTY.md`) turns a one-line request into a finished short film rendered from code. It works through a studio's jobs (brand study, pitch, storyboard, frames, music, sound, edit) and has a fresh reviewer score the cut, sending it back until it clears the bar. Notes go in through a local review room where you click on a frame.
+
+- Skill: `.claude/skills/take-one`, copied as-is from upstream commit `830621cce11127a30120d7878570eb8acaaa5bad` (v0.1.0, 2026-11-04)
+- The free route draws everything in code. It can also use paid image, video, voice and music services (Higgsfield, ElevenLabs, Suno and others), but it asks with the real price before spending anything.
+
+Use it with `/take-one a 15 second vertical teaser for my fishing channel`, or check the machine first:
+
+```sh
+bash .claude/skills/take-one/scripts/doctor.sh
+```
+
+Requirements: Node 18+, Chrome, FFmpeg. Each film project installs `playwright-core` itself.
+
+#### Updating
+
+```sh
+git clone --depth 1 https://github.com/talsiach/take-one /tmp/take-one
+rm -rf .claude/skills/take-one && mkdir -p .claude/skills/take-one
+git -C /tmp/take-one archive HEAD | tar -x -C .claude/skills/take-one
+```
+
+Then update the commit hash above.
