@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en" data-composition-variables='[
+  {"id":"q1","type":"string","label":"Title, line 1","default":"How many fish","group":"Hook"},
+  {"id":"q2","type":"string","label":"Title, line 2 (italic)","default":"climbed the ladders?","group":"Hook"},
+  {"id":"stations","type":"string","label":"Stations (JSON, from data/counts.js)","default":"[{\"name\":\"Bonneville Dam\",\"eyebrow\":\"Columbia River · 7 days to Nov 3\",\"week\":4496,\"rows\":[[\"Chinook\",583029,632035],[\"Coho\",97002,159781],[\"Steelhead\",63292,155947]]},{\"name\":\"The Dalles Dam\",\"eyebrow\":\"Columbia River · 7 days to Oct 31\",\"week\":3691,\"rows\":[[\"Chinook\",261528,360178],[\"Coho\",35841,55536],[\"Steelhead\",48468,129708]]},{\"name\":\"Willamette Falls\",\"eyebrow\":\"Willamette River · 7 days to Oct 31\",\"week\":442,\"rows\":[[\"Chinook\",38763,33096],[\"Coho\",8577,21806],[\"Steelhead\",17660,9232]]}]","group":"Data"},
+  {"id":"badgeNum","type":"string","label":"Badge number","default":"191%","group":"Data"},
+  {"id":"badgeText","type":"string","label":"Badge text","default":"steelhead vs. last year","group":"Data"},
+  {"id":"tag1","type":"string","label":"End line (roman)","default":"Updated","group":"End"},
+  {"id":"tag2","type":"string","label":"End line (italic)","default":"every morning.","group":"End"},
+  {"id":"url1","type":"string","label":"Address","default":"ORFishForecast.com","group":"End"}
+]'>
+<head>
+<meta charset="utf-8">
+<title>Oregon Fish Forecast · Fish counts</title>
+<script src="vendor/gsap.min.js"></script>
+<script src="vendor/om.js"></script>
+<style id="om-fonts">
+@font-face { font-family: "Fraunces"; src: url("assets/fonts/Fraunces-full.woff2") format("woff2"); font-weight: 100 900; font-style: normal; }
+@font-face { font-family: "Fraunces"; src: url("assets/fonts/Fraunces-full-italic.woff2") format("woff2"); font-weight: 100 900; font-style: italic; }
+@font-face { font-family: "Instrument Sans"; src: url("assets/fonts/InstrumentSans-wght.woff2") format("woff2"); font-weight: 400 700; font-style: normal; }
+@font-face { font-family: "JetBrains Mono"; src: url("assets/fonts/JetBrainsMono-wght.woff2") format("woff2"); font-weight: 100 800; font-style: normal; }
+</style>
+<style>
+  :root { --ink: #023926; --ink-deep: #001F13; --on-ink: #ECF1E2; --on-ink-muted: #A8BEAC; --sun: #F8E532; --plate: #F9F7EE;
+          --display: 'Fraunces', Georgia, serif; --sans: 'Instrument Sans', sans-serif; --mono: 'JetBrains Mono', monospace; }
+  html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: var(--ink-deep); }
+  #film { position: relative; width: 1080px; height: 1920px; overflow: hidden; color: var(--on-ink); font-family: var(--sans);
+          background: radial-gradient(900px 800px at 78% 22%, rgba(46, 96, 52, .5), transparent 70%), linear-gradient(180deg, var(--ink-deep), #00261A 60%, #002A1C); -webkit-font-smoothing: antialiased; }
+  .abs { position: absolute; }
+  .eyebrow { font: 500 26px/1.3 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--on-ink-muted); }
+  .display { font-family: var(--display); font-weight: 360; font-variation-settings: 'opsz' 144, 'SOFT' 30; letter-spacing: -0.035em; line-height: .92; margin: 0; }
+  .display em { font-style: italic; font-weight: 300; color: var(--sun); }
+  .mask { display: block; overflow: hidden; padding-bottom: .36em; margin-bottom: -.36em; }
+  .mask > span { display: block; }
+
+  /* hook: a fish ladder */
+  #hook { position: absolute; inset: 0; }
+  #hook .eyebrow { left: 84px; top: 300px; }
+  #q { left: 76px; top: 350px; font-size: 112px; width: 940px; }
+  #q .l2 { padding-left: 56px; }
+  .step { position: absolute; width: 270px; height: 16px; border-radius: 8px; background: rgba(236, 241, 226, .2); }
+  .step i { position: absolute; inset: 0; border-radius: 8px; background: var(--sun); opacity: 0; }
+  .fall { position: absolute; width: 4px; border-radius: 2px; background: linear-gradient(180deg, rgba(120, 190, 235, .6), transparent); }
+  #hfish { left: 0; top: 0; width: 380px; height: 184px; transform-origin: 50% 60%; }
+  #hfish img { width: 100%; height: 100%; filter: drop-shadow(0 16px 20px rgba(0, 12, 6, .5)); }
+
+  /* stations, side by side: the camera whips upstream from one to the next */
+  #strip { left: 0; top: 0; width: 3240px; height: 1920px; }
+  .st { position: absolute; top: 0; width: 1080px; height: 1920px; }
+  .st .eyebrow { left: 84px; top: 300px; }
+  .st h2 { left: 76px; top: 346px; font-size: 112px; white-space: nowrap; }
+  .st .num { left: 70px; top: 492px; font: 400 280px/.9 var(--mono); letter-spacing: -0.06em; color: var(--sun); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .st .cap { left: 84px; top: 770px; font: 400 38px/1.3 var(--sans); color: var(--on-ink-muted); }
+  .st .cap b { color: var(--on-ink); font-weight: 500; }
+  .st .bh { left: 84px; top: 880px; font-size: 22px; }
+  .row { position: absolute; left: 84px; width: 840px; height: 110px; }
+  .row .lab { position: absolute; left: 0; top: 0; font: 500 34px/1 var(--sans); color: var(--on-ink); white-space: nowrap; }
+  .row .lab span { font: 400 26px var(--mono); color: var(--on-ink-muted); margin-left: 10px; }
+  .row .pct { position: absolute; right: 0; top: 4px; font: 500 28px/1 var(--mono); color: var(--on-ink-muted); }
+  .row .pct b { color: var(--on-ink); font-weight: 500; }
+  .bar { position: absolute; left: 0; height: 16px; border-radius: 8px; transform-origin: 0 50%; }
+  .bar.now { top: 50px; background: var(--sun); }
+  .bar.ly { top: 76px; height: 10px; background: rgba(168, 190, 172, .55); }
+  .track { position: absolute; left: 0; width: 840px; border-radius: 8px; background: rgba(236, 241, 226, .08); }
+  #badge { left: 640px; top: 470px; width: 300px; height: 300px; border-radius: 50%; background: var(--sun); color: var(--ink-deep); display: grid; place-content: center; text-align: center; transform-origin: 50% 50%; box-shadow: 0 24px 40px rgba(0, 10, 4, .45); }
+  #badge b { display: block; font: 500 92px/1 var(--mono); letter-spacing: -0.05em; }
+  #badge span { display: block; width: 236px; margin: 8px auto 0; font: 600 26px/1.15 var(--sans); }
+
+  /* end card */
+  #plate { left: 40px; top: 1190px; width: 1000px; height: 760px; border-radius: 34px 34px 0 0; overflow: hidden; background: var(--plate); }
+  #plate img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 62%; transform-origin: 50% 40%; }
+  #end { position: absolute; inset: 0; text-align: center; }
+  #efish { left: 300px; top: 300px; width: 480px; height: 232px; transform-origin: 50% 50%; }
+  #efish img { width: 100%; height: 100%; filter: drop-shadow(0 24px 30px rgba(0, 12, 6, .55)); }
+  #word { left: 0; width: 1080px; top: 572px; font: 500 64px/1 var(--display); letter-spacing: -0.01em; }
+  #word em { font-style: italic; font-weight: 400; }
+  #tag { left: 0; width: 1080px; top: 680px; font-size: 96px; }
+  #url { left: 50%; top: 860px; display: flex; align-items: center; gap: 28px; padding: 30px 40px 30px 44px; border-radius: 999px; background: var(--sun); color: var(--ink-deep); white-space: nowrap; }
+  #url .t { font: 600 60px/1.1 var(--sans); letter-spacing: -0.015em; }
+  #url svg { width: 60px; height: 60px; flex: none; }
+</style>
+</head>
+<body>
+<div id="film" data-composition-id="film" data-width="1080" data-height="1920">
+  <audio id="om-sound" src="assets/sound.wav" data-start="0" data-duration="13.448" data-track-index="8" data-volume="1"></audio>
+  <div id="plate" class="abs" data-om-id="artwork"><img src="assets/river-country.webp" alt=""></div>
+
+  <section id="hook" data-om-id="title">
+    <div class="abs eyebrow">Fish counts · Columbia River DART</div>
+    <h1 id="q" class="abs display">
+      <span class="mask"><span class="l1" data-var-text="q1">How many fish</span></span>
+      <span class="mask"><span class="l2"><em data-var-text="q2">climbed the ladders?</em></span></span>
+    </h1>
+    <div id="ladder"></div>
+    <div id="hfish" class="abs" data-om-id="fish"><img src="assets/weather-fish.webp" alt=""></div>
+  </section>
+
+  <div id="strip" class="abs"></div>
+  <div id="badge" class="abs" data-om-id="badge"><b data-var-text="badgeNum">191%</b><span data-var-text="badgeText">steelhead vs. last year</span></div>
+
+  <section id="end" data-om-id="end">
+    <div id="efish" class="abs" data-om-id="end-fish"><img src="assets/weather-fish.webp" alt="Oregon Fish Forecast"></div>
+    <div id="word" class="abs" data-om-id="wordmark">Oregon <em>Fish Forecast</em></div>
+    <h2 id="tag" class="abs display" data-om-id="tagline"><span data-var-text="tag1">Updated</span> <em data-var-text="tag2">every morning.</em></h2>
+    <div id="url" class="abs" data-om-id="address"><div class="t" data-var-text="url1">ORFishForecast.com</div>
+      <svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M18 15V6H9"/></svg></div>
+  </section>
+</div>
+
+<script type="text/vnd.abc" id="om-score">
+X:1
+T:Oregon Fish Forecast · Fish counts (marimba pulse, 116)
+M:4/4
+L:1/8
+Q:1/4=116
+K:Am
+V:MA inst=marimba gain=0.7
+!mark:hook! !p! A,CEA ECA,C | [M:2/4] A,CEA | [M:4/4] !mark:bon! !mf! F,A,CF CA,F,A, | !mark:tda! C,E,G,C G,E,C,E, | !mark:wff! !f! G,B,DG DB,G,B, | [M:2/4] A,^C z2 | [M:4/4] [K:D] !mark:end! !ff! D,F,A,D A,F,D,F, | [M:2/4] D,F,A,D |]
+V:PZ inst=pizz gain=0.8
+!p! A,,2 A,,2 A,,2 A,,2 | [M:2/4] A,,2 A,,2 | [M:4/4] !mf! F,,2 F,,2 F,,2 F,,2 | C,2 C,2 C,2 C,2 | !f! G,,2 G,,2 G,,2 G,,2 | [M:2/4] A,,2 z2 | [M:4/4] [K:D] !ff! D,,2 D,,2 D,,2 D,,2 | [M:2/4] D,,4 |]
+V:DR inst=drums kit=folk gain=0.9
+!p! C,,2 z2 C,,2 z2 | [M:2/4] C,,2 ^D,,2 | [M:4/4] !mf! C,,2 ^D,,2 C,, C,, ^D,,2 | C,,2 ^D,,2 C,, C,, ^D,,2 | !f! C,, ^D,, C,, ^D,, [C,,^C,] ^D,, C,, ^D,, | [M:2/4] C,,2 !rise(! z2 | [M:4/4] !rise)! !hit! !f! [C,,^C,]2 ^D,,2 C,,2 ^D,,2 | [M:2/4] [C,,^C,]2 z2 |]
+V:SH inst=drums kit=folk gain=0.4
+z8 | [M:2/4] !p! ^F,, ^F,, ^F,, ^F,, | [M:4/4] !mp! ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, | ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, | !f! ^F,,/^F,,/^F,,/^F,,/ ^F,,/^F,,/^F,,/^F,,/ ^F,,/^F,,/^F,,/^F,,/ ^F,,/^F,,/^F,,/^F,,/ | [M:2/4] ^F,, ^F,, z2 | [M:4/4] !f! ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, | [M:2/4] z4 |]
+V:ST inst=strings gain=0.35
+!p! [ACe]8 | [M:2/4] [ACe]4 | [M:4/4] !mp! [FAc]8 | [EGc]8 | [DGB]8 | [M:2/4] [^CEA]2 z2 | [M:4/4] [K:D] !mf! [DFA]8 | [M:2/4] [DFA]4 |]
+V:GL inst=glock role=melody gain=0.6
+!mp! z2 e2 g2 a2 | [M:2/4] c'2 z2 | [M:4/4] z8 | z8 | z8 | [M:2/4] z4 | [M:4/4] [K:D] z2 A d e a3 | [M:2/4] z4 |]
+</script>
+
+<script>
+  const V = OM.vars();
+  OM.music({ bpm: 116 });
+  const B = (n) => OM.beat(n);
+  const $ = (s) => document.querySelector(s);
+  const fmt = (n) => Math.round(n).toLocaleString('en-US');
+  const esc = (s) => String(s).replace(/[<>&]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' })[c]);
+
+  // ---- the ladder: four steps climbing to the right, water falling off each lip
+  const STEPS = [[60, 1440], [290, 1310], [520, 1180], [750, 1050]];
+  $('#ladder').innerHTML = STEPS.map(([x, y], i) =>
+    `<div class="step" id="s${i}" data-om-id="step-${i + 1}" style="left:${x}px; top:${y}px"><i></i></div>` +
+    [0, 1, 2].map((k) => `<div class="fall" style="left:${x - 4 - k * 9}px; top:${y + 12}px; height:${70 + k * 26}px"></div>`).join('')
+  ).join('');
+  const onStep = (i) => ({ x: STEPS[i][0] + 135 - 190, y: STEPS[i][1] - 152 });   // fish box top-left resting on step i
+
+  // ---- stations
+  const ST = JSON.parse(V.stations);
+  $('#strip').innerHTML = ST.map((s, k) => {
+    const rows = s.rows.map(([name, now, ly], r) => {
+      const m = Math.max(now, ly), pct = Math.round(100 * now / ly);
+      return `<div class="row" style="top:${930 + r * 124}px"><div class="lab">${esc(name)}<span>${fmt(now)} this year</span></div>` +
+        `<div class="pct"><b>${pct}%</b> of last year</div><div class="track" style="top:50px; height:16px"></div><div class="track" style="top:76px; height:10px"></div>` +
+        `<div class="bar now" style="width:${(840 * now / m).toFixed(0)}px"></div><div class="bar ly" style="width:${(840 * ly / m).toFixed(0)}px"></div></div>`;
+    }).join('');
+    return `<div class="st" data-om-id="station-${k + 1}" style="left:${k * 1080}px"><div class="abs eyebrow">${esc(s.eyebrow)}</div>` +
+      `<h2 class="abs display">${esc(s.name)}</h2><div class="abs num">${fmt(s.week)}</div>` +
+      `<div class="abs cap"><b>adult Chinook, coho and steelhead</b> in 7 days</div><div class="abs eyebrow bh">Year to date vs. same date last year</div>${rows}</div>`;
+  }).join('');
+  const panels = gsap.utils.toArray('.st');
+
+  // ---- hidden until their moment
+  gsap.set('#q .l2', { yPercent: 160 });
+  gsap.set(['#strip', '#badge', '#end'], { autoAlpha: 0 });
+  gsap.set('#plate', { y: 820 });
+  gsap.set('#url', { xPercent: -50 });
+  gsap.set('.bar', { scaleX: 0 });
+  gsap.set('#hfish', { x: (onStep(0).x + onStep(1).x) / 2, y: onStep(1).y - 190, rotation: -18 });
+
+  const tl = gsap.timeline({ paused: true, defaults: { ease: 'expo.out' } });
+
+  // ================= hook (beats 0–6): the fish climbs the ladder, one step per beat
+  tl.addLabel('scene:hook', 0);
+  tl.to('#q .l2', { yPercent: 0, duration: B(1) }, B(.5));
+  const hop = (i, at, air) => {   // jump onto step i, landing at `at`
+    const p = onStep(i);
+    tl.to('#hfish', { x: p.x, duration: air, ease: 'none' }, at - air);
+    tl.to('#hfish', { y: p.y - 190, duration: air * .45, ease: 'power2.out' }, at - air);
+    tl.to('#hfish', { y: p.y, duration: air * .55, ease: 'power2.in' }, at - air * .55);
+    tl.to('#hfish', { rotation: -18, duration: air * .4, ease: 'power2.out' }, at - air);
+    tl.to('#hfish', { rotation: 0, duration: air * .5, ease: 'power2.inOut' }, at - air * .5);
+    tl.fromTo(`#s${i} i`, { opacity: 1 }, { opacity: 0, duration: B(1), ease: 'power2.out', immediateRender: false }, at);
+    OM.sfx('pop', at, { gain: .45, note: [1, 3, 5, 8][i], pan: -.3 + i * .2 });
+  };
+  // frame 0 is already mid-leap onto step 2
+  tl.to('#hfish', { x: onStep(1).x, duration: B(1), ease: 'none' }, 0);
+  tl.to('#hfish', { y: onStep(1).y, duration: B(1), ease: 'power2.in' }, 0);
+  tl.to('#hfish', { rotation: 0, duration: B(1), ease: 'power2.inOut' }, 0);
+  tl.fromTo('#s1 i', { opacity: 1 }, { opacity: 0, duration: B(1), ease: 'power2.out', immediateRender: false }, B(1));
+  OM.sfx('pop', B(1), { gain: .45, note: 3, pan: -.1 });
+  hop(2, B(2), B(.65));
+  hop(3, B(3), B(.65));
+  // the big leap: off the top step and out of the frame
+  tl.to('#hfish', { x: 1180, y: -260, rotation: -34, duration: B(1.1), ease: 'power2.in' }, B(3.4));
+  OM.sfx('whoosh', B(4), { gain: .45, pan: .4 });
+  tl.to('#ladder .step, #ladder .fall', { y: 260, autoAlpha: 0, duration: B(1.2), ease: 'power2.in', stagger: .04 }, B(4.3));
+  tl.fromTo('#q', { scale: 1 }, { scale: 1.04, transformOrigin: '0% 50%', duration: B(6), ease: 'none', immediateRender: false }, 0);
+
+  // ================= stations (beats 6–20): whip upstream from dam to dam
+  const enter = (k, at) => {
+    const p = panels[k];
+    const num = p.querySelector('.num');
+    const c = { v: 0 };
+    tl.fromTo(c, { v: 0 }, { v: ST[k].week, duration: B(1.5), ease: 'expo.out', onUpdate: () => { num.textContent = fmt(c.v); } }, at);
+    tl.fromTo(num, { scale: 1.3, transformOrigin: '0% 55%' }, { scale: 1, duration: B(1.5) }, at);
+    tl.fromTo(p.querySelector('h2'), { x: 70, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: B(1), immediateRender: false }, at + B(.2));
+    tl.fromTo(p.querySelectorAll('.bar'), { scaleX: 0 }, { scaleX: 1, duration: B(1.4), stagger: B(.15), ease: 'expo.out', immediateRender: false }, at + B(.6));
+    OM.sfx('count', at + B(1), { gain: .4 });
+  };
+  tl.addLabel('scene:bon', B(6));
+  tl.set('#hook', { autoAlpha: 0 }, B(6));
+  tl.set('#strip', { autoAlpha: 1 }, B(6));
+  tl.fromTo('#strip', { x: 300 }, { x: 0, duration: B(.8) }, B(6));
+  OM.sfx('hit', B(6), { gain: .5 });
+  enter(0, B(6));
+
+  tl.addLabel('scene:tda', B(10));
+  tl.to('#strip', { x: -1080, duration: B(.7), ease: 'expo.inOut' }, B(10) - B(.35));
+  OM.sfx('whip', B(10), { gain: .45 });
+  enter(1, B(10));
+
+  tl.addLabel('scene:wff', B(14));
+  tl.to('#strip', { x: -2160, duration: B(.7), ease: 'expo.inOut' }, B(14) - B(.35));
+  OM.sfx('whip', B(14), { gain: .45, pan: .2 });
+  enter(2, B(14));
+  tl.fromTo('#badge', { autoAlpha: 0, scale: .2, rotation: -40 }, { autoAlpha: 1, scale: 1, rotation: -8, duration: B(1), ease: 'back.out(1.7)', immediateRender: false }, B(16));
+  OM.sfx('impact', B(16) + .08, { gain: .55 });
+  tl.to('#badge', { rotation: -4, duration: B(4), ease: 'sine.inOut' }, B(17));
+
+  // ================= end (beats 20–26)
+  tl.addLabel('scene:end', B(20));
+  tl.to('#strip', { x: -3240, duration: B(.7), ease: 'expo.inOut' }, B(20) - B(.35));
+  tl.to('#badge', { x: -1080, duration: B(.7), ease: 'expo.inOut' }, B(20) - B(.35));
+  OM.sfx('whoosh', B(20), { gain: .4 });
+  tl.set(['#strip', '#badge'], { autoAlpha: 0 }, B(20.4));
+  tl.set('#end', { autoAlpha: 1 }, B(20));
+  tl.fromTo('#efish', { y: 700, rotation: -30, scale: .7 }, { y: 0, rotation: 0, scale: 1, duration: B(1.4), ease: OM.spring(0.14), immediateRender: false }, B(20));
+  tl.to('#plate', { y: 0, duration: B(1.8) }, B(20));
+  tl.fromTo('#plate img', { scale: 1.14 }, { scale: 1, duration: B(6), ease: 'power1.out' }, B(20));
+  OM.sfx('sparkle', B(20.7), { gain: .45 });
+  tl.fromTo('#word', { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: B(1), immediateRender: false }, B(20.6));
+  tl.fromTo('#tag', { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: B(1), immediateRender: false }, B(21));
+  tl.fromTo('#url', { autoAlpha: 0, y: 60, scale: .9 }, { autoAlpha: 1, y: 0, scale: 1, duration: B(1.2), ease: 'back.out(1.5)', immediateRender: false }, B(22));
+  OM.sfx('pop', B(22) + .06, { gain: .5, note: 5 });
+  tl.fromTo('#end', { scale: 1 }, { scale: 1.03, transformOrigin: '50% 35%', duration: B(5), ease: 'none', immediateRender: false }, B(21));
+  tl.to({}, { duration: Math.max(0, B(26) - tl.duration()) }, tl.duration());
+
+  window.__timelines['film'] = tl;
+</script>
+</body>
+</html>
