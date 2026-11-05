@@ -1,0 +1,6 @@
+# huashu-motion renders, studio history and caches
+out/
+.om/
+.cache/
+node_modules/
+.DS_Store
