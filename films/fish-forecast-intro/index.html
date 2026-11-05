@@ -62,6 +62,7 @@
 
   #q { left: 80px; top: 690px; font-size: 118px; width: 920px; }
   #q .l2 { padding-left: 60px; }
+  #qline { left: 68px; top: 238px; width: 548px; height: 7px; border-radius: 4px; background: var(--sun); transform-origin: 0 50%; }
 
   #ans .eyebrow { left: 84px; top: 712px; }
   #num { left: 70px; top: 764px; font: 400 290px/.9 var(--mono); letter-spacing: -0.06em; color: var(--sun); font-variant-numeric: tabular-nums; white-space: nowrap; }
@@ -99,7 +100,7 @@
 </head>
 <body>
 <div id="film" data-composition-id="film" data-width="1080" data-height="1920">
-  <audio id="om-sound" src="assets/sound.wav" data-start="0" data-duration="10.169" data-track-index="8" data-volume="1"></audio>
+  <audio id="om-sound" src="assets/sound.wav" data-start="0" data-duration="14.746" data-track-index="8" data-volume="1"></audio>
   <div class="ground-storm" data-om-id="storm"></div>
   <div class="ground-warm" data-om-id="warm"></div>
   <div id="paper" data-om-id="paper"></div>
@@ -111,6 +112,7 @@
   <section id="q" class="abs display" data-om-id="question">
     <span class="mask"><span class="l1" data-var-text="q1">Are the fish</span></span>
     <span class="mask"><span class="l2"><em data-var-text="q2">in the river yet?</em></span></span>
+    <div id="qline" class="abs" data-om-id="underline"></div>
   </section>
 
   <section id="ans" data-om-id="count">
@@ -158,25 +160,25 @@
 
 <script type="text/vnd.abc" id="om-score">
 X:1
-T:Oregon Fish Forecast · Read the river (folk stomp, 118)
+T:Oregon Fish Forecast · Read the river (folk stomp, 118, 14.75 s)
 M:4/4
 L:1/8
 Q:1/4=118
 K:C
 V:DR inst=drums kit=folk gain=0.95
-!mark:hook! !mp! C,,2 ^D,,2 C,,2 ^D,,2 | !mark:answer! !mf! C,,2 ^D,,2 C,, C,, ^D,,2 | !mark:burst! !f! !crescendo(! C,, ^D,, C,, ^D,, [C,,^D,,] ^D,, !crescendo)! !rise(! z2 | !rise)! !mark:drop! !hit! !ff! [C,,^C,]2 ^D,,2 C,,2 ^D,,2 | !mark:end! !mf! C,,2 ^D,,2 [C,,^C,]2 z2 |]
+!mark:hook! !p! C,,2 ^D,,2 C,,2 ^D,,2 | C,,2 ^D,,2 C,, C,, ^D,,2 | !mark:answer! !mf! C,,2 ^D,,2 C,,2 ^D,,2 | !mark:score! C,,2 ^D,,2 C,, C,, ^D,,2 | !mark:burst! !f! !crescendo(! C,, ^D,, C,, ^D,, C,, ^D,, [C,,^D,,] ^D,, !crescendo)! | [M:2/4] [C,,^D,,]2 !rise(! z2 | [M:3/4] !rise)! !mark:drop! !hit! !ff! [C,,^C,]2 ^D,,2 C,,2 | [M:4/4] !mark:end! !mf! C,,2 ^D,,2 [C,,^C,]2 z2 |]
 V:SH inst=drums kit=folk gain=0.45
-!p! ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, | !mp! ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, | !f! ^F,,/^F,,/^F,,/^F,,/ ^F,,/^F,,/^F,,/^F,,/ ^F,,/^F,,/^F,,/^F,,/ z2 | !f! ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, | ^F,, ^F,, ^F,, ^F,, z4 |]
+!p! ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, | ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, | !mp! ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, | ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, | !f! ^F,,/^F,,/^F,,/^F,,/ ^F,,/^F,,/^F,,/^F,,/ ^F,,/^F,,/^F,,/^F,,/ ^F,,/^F,,/^F,,/^F,,/ | [M:2/4] ^F,, ^F,, z2 | [M:3/4] !f! ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, | [M:4/4] ^F,, ^F,, ^F,, ^F,, z4 |]
 V:GT inst=guitar gain=0.7
-!mp! [C,G,CEG]2 [C,G,CEG][C,G,CEG] z[C,G,CEG] [C,G,CEG]2 | !mf! [F,CFAc]2 [F,CFAc][F,CFAc] z[F,CFAc] [F,CFAc]2 | !f! [A,EAce]2 [A,EAce][A,EAce] [G,DGBd][G,DGBd] z2 | [K:D] !f! [D,A,DFA]2 [D,A,DFA][D,A,DFA] z[D,A,DFA] [D,A,DFA]2 | [G,DGBd]2 [G,DGBd][G,DGBd] [D,A,DFAd]4 |]
+!p! [C,G,CEG]2 [C,G,CEG][C,G,CEG] z[C,G,CEG] [C,G,CEG]2 | [A,EAce]2 [A,EAce][A,EAce] z[A,EAce] [A,EAce]2 | !mf! [F,CFAc]2 [F,CFAc][F,CFAc] z[F,CFAc] [F,CFAc]2 | [G,DGBd]2 [G,DGBd][G,DGBd] z[G,DGBd] [G,DGBd]2 | !f! [A,EAce]2 [A,EAce][A,EAce] [G,DGBd]2 [G,DGBd][G,DGBd] | [M:2/4] [G,DGBd]2 z2 | [M:3/4] [K:D] !f! [D,A,DFA]2 [D,A,DFA][D,A,DFA] z[D,A,DFA] | [M:4/4] [G,DGBd]2 [G,DGBd][G,DGBd] [D,A,DFAd]4 |]
 V:UK inst=uke gain=0.45
-z8 | !mp! z[FAc] z[FAc] z[FAc] z[FAc] | !f! z[Ace] z[Ace] z[GBd] z2 | [K:D] z[DFA] z[DFA] z[DFA] z[DFA] | z[GBd] z[GBd] z4 |]
+z8 | z8 | !mf! z[FAc] z[FAc] z[FAc] z[FAc] | z[GBd] z[GBd] z[GBd] z[GBd] | !f! z[Ace] z[Ace] z[GBd] z[GBd] | [M:2/4] z[GBd] z2 | [M:3/4] [K:D] z[DFA] z[DFA] z[DFA] | [M:4/4] z[GBd] z[GBd] z4 |]
 V:BS inst=bass gain=0.75
-!mp! C,,4 C,,4 | !mf! F,,2 F,,F,, F,,2 C,2 | !f! A,,2 A,,A,, G,,2 z2 | [K:D] !f! D,,2 D,,D,, D,,2 A,,2 | G,,2 G,,2 D,,4 |]
+!mp! C,,4 C,,4 | A,,4 A,,4 | !mf! F,,2 F,,F,, F,,2 C,2 | G,,2 G,,G,, G,,2 D,2 | !f! A,,2 A,,A,, G,,2 G,,G,, | [M:2/4] G,,2 z2 | [M:3/4] [K:D] !f! D,,2 D,,D,, D,,2 | [M:4/4] G,,2 G,,2 D,,4 |]
 V:GL inst=glock role=melody gain=0.6
-!mf! G c d e3 z2 | z4 e d c2 | z8 | [K:D] !f! A d e f3 z2 | A d e a5 |]
+!mf! z G c d e2 z2 | z4 e d c2 | z8 | z8 | z8 | [M:2/4] z4 | [M:3/4] [K:D] !f! A d e f3 | [M:4/4] A d e a5 |]
 V:ST inst=strings gain=0.4
-z8 | z8 | z8 | [K:D] !mp! [DFAd]8 | [DGBd]4 [DFAd]4 |]
+z8 | z8 | z8 | z8 | z8 | [M:2/4] z4 | [M:3/4] [K:D] !mp! [DFAd]6 | [M:4/4] [DGBd]4 [DFAd]4 |]
 </script>
 
 <script>
@@ -224,6 +226,7 @@ z8 | z8 | z8 | [K:D] !mp! [DFAd]8 | [DGBd]4 [DFAd]4 |]
   gsap.set(rows, { autoAlpha: 0 });
   gsap.set('#plate', { y: 820 });
   gsap.set(['#q', '#hero', '#paper'], { autoAlpha: 0 });
+  gsap.set('#qline', { scaleX: 0 });
 
   // fish poses (x, y offsets from the base centre (540, 419), scale against 700 px)
   const POSE = {
@@ -237,99 +240,108 @@ z8 | z8 | z8 | [K:D] !mp! [DFAd]8 | [DGBd]4 [DFAd]4 |]
 
   const tl = gsap.timeline({ paused: true, defaults: { ease: 'expo.out' } });
 
-  // ================= hook: storm to sun along the fish's own body
+  // Timing: every text screen gets about 2 s (Kenny: "it flashes text too fast"). 29 beats at 118 = 14.75 s.
+  // ================= hook (bars 1–2): storm to sun along the fish's own body, then the question
   tl.addLabel('scene:hook', 0);
-  tl.to('#fish', { ...POSE.sun, duration: B(1.5), ease: 'expo.inOut' }, 0);
-  OM.sfx('whoosh', B(.75), { gain: .5 });
-  tl.fromTo('#rain', { x: 0, y: 0 }, { x: -260, y: 900, duration: B(2.4), ease: 'none' }, 0);
-  tl.to('#rain', { autoAlpha: 0, duration: B(.8), ease: 'power2.in' }, B(.9));
-  tl.to('.ground-storm', { autoAlpha: 0, duration: B(1.5), ease: 'power1.inOut' }, B(.8));
-  tl.to('.ground-warm', { autoAlpha: 1, duration: B(1.5), ease: 'power1.inOut' }, B(1.2));
-  tl.to('#glowWrap', { scale: 1, autoAlpha: 1, duration: B(1), ease: 'expo.out' }, B(1.5));
-  OM.sfx('sparkle', B(1.5), { gain: .55 });
+  tl.to('#fish', { ...POSE.sun, duration: B(2), ease: 'expo.inOut' }, 0);
+  OM.sfx('whoosh', B(1), { gain: .4 });
+  tl.fromTo('#rain', { x: 0, y: 0 }, { x: -300, y: 1050, duration: B(3), ease: 'none' }, 0);
+  tl.to('#rain', { autoAlpha: 0, duration: B(1), ease: 'power2.in' }, B(1.2));
+  tl.to('.ground-storm', { autoAlpha: 0, duration: B(1.5), ease: 'power1.inOut' }, B(1));
+  tl.to('.ground-warm', { autoAlpha: 1, duration: B(1.5), ease: 'power1.inOut' }, B(1.6));
+  tl.to('#glowWrap', { scale: 1, autoAlpha: 1, duration: B(1), ease: 'expo.out' }, B(2));
+  OM.sfx('sparkle', B(2), { gain: .45 });
   // hard pull-out to the anchor
-  tl.to('#fish', { ...POSE.top, duration: B(1), ease: 'expo.out' }, B(2));
-  tl.to('#glowWrap', { autoAlpha: .55, duration: B(1) }, B(2.2));
-  tl.to('#plate', { y: 500, duration: B(2), ease: 'expo.out' }, B(2));
-  OM.sfx('whoosh', B(2) + .05, { gain: .42, pan: -.2 });
-  tl.set('#q', { autoAlpha: 1 }, B(2.2));
-  tl.to('#q .l1', { yPercent: 0, duration: B(1) }, B(2.2));
-  tl.to('#q .l2', { yPercent: 0, duration: B(1) }, B(2.6));
+  tl.to('#fish', { ...POSE.top, duration: B(1), ease: 'expo.out' }, B(3));
+  tl.to('#glowWrap', { autoAlpha: .55, duration: B(1) }, B(3.2));
+  OM.sfx('whoosh', B(3) + .05, { gain: .42, pan: -.2 });
+  tl.set('#q', { autoAlpha: 1 }, B(3.2));
+  tl.to('#q .l1', { yPercent: 0, duration: B(1) }, B(3.2));
+  tl.to('#q .l2', { yPercent: 0, duration: B(1) }, B(3.7));
+  tl.fromTo('#q', { scale: 1 }, { scale: 1.045, transformOrigin: '0% 50%', duration: B(4.8), ease: 'none', immediateRender: false }, B(3.2));
+  // bar 2: the artwork peeks in as the weather clears, and "yet?" gets underlined
+  tl.to('#plate', { y: 500, duration: B(2), ease: 'expo.out' }, B(4));
+  OM.sfx('slide', B(4), { gain: .3 });
+  tl.fromTo('#qline', { scaleX: 0 }, { scaleX: 1, duration: B(1), ease: 'expo.out', immediateRender: false }, B(6));
+  OM.sfx('draw', B(6), { gain: .4 });
 
-  // small life: the fish swims on the spot from the pull-out until the stop
-  tl.to('#fishSwim', { y: 9, rotation: 1.6, duration: B(2.25), ease: 'sine.inOut', repeat: 3, yoyo: true }, B(2.5));
+  // small life: the fish swims on the spot from the pull-out until the stop (8 half-cycles to beat 21)
+  tl.to('#fishSwim', { y: 9, rotation: 1.6, duration: B(2.1875), ease: 'sine.inOut', repeat: 7, yoyo: true }, B(3.5));
 
-  // ================= answer: 4,496, then the score
-  tl.addLabel('scene:answer', B(4));
-  tl.set('#q', { autoAlpha: 0 }, B(4));
-  tl.set('#ans', { autoAlpha: 1 }, B(4));
-  OM.sfx('hit', B(4), { gain: .55 });
-  tl.fromTo('#ans', { scale: 1.06, transformOrigin: '0% 40%' }, { scale: 1, duration: B(2), ease: 'power2.out' }, B(4));
+  // ================= answer (bar 3): 4,496
+  tl.addLabel('scene:answer', B(8));
+  tl.set('#q', { autoAlpha: 0 }, B(8));
+  tl.set('#ans', { autoAlpha: 1 }, B(8));
+  OM.sfx('hit', B(8), { gain: .55 });
+  tl.fromTo('#ans', { scale: 1.07, transformOrigin: '0% 40%' }, { scale: 1, duration: B(4), ease: 'sine.out' }, B(8));
   const counter = { v: 0 };
-  tl.fromTo(counter, { v: 0 }, { v: V.count, duration: B(1.15), ease: 'expo.out',
-    onUpdate: () => { $('#num').textContent = fmt(counter.v); } }, B(4));
-  tl.fromTo('#ans .lbl', { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: B(1) }, B(4.4));
-  tl.fromTo('#num', { scale: 1.35, transformOrigin: '0% 55%' }, { scale: 1, duration: B(1.3), ease: 'expo.out' }, B(4));
-  OM.sfx('count', B(4.9), { gain: .45 });
+  tl.fromTo(counter, { v: 0 }, { v: V.count, duration: B(1.6), ease: 'expo.out',
+    onUpdate: () => { $('#num').textContent = fmt(counter.v); } }, B(8));
+  tl.fromTo('#num', { scale: 1.35, transformOrigin: '0% 55%' }, { scale: 1, duration: B(1.6), ease: 'expo.out' }, B(8));
+  tl.fromTo('#ans .lbl', { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: B(1) }, B(8.6));
+  OM.sfx('count', B(9.1), { gain: .45 });
 
-  tl.set('#ans', { autoAlpha: 0 }, B(6));
-  tl.set('#score', { autoAlpha: 1 }, B(6));
-  tl.set('#paper', { autoAlpha: 1 }, B(6));
-  tl.set('#glowWrap', { autoAlpha: 0 }, B(6));
-  tl.fromTo('#ring', { scale: 1.35, transformOrigin: '50% 50%' }, { scale: 1, duration: B(1.2), ease: 'expo.out' }, B(6));
-  OM.sfx('hit', B(6), { gain: .5, pan: .15 });
-  tl.fromTo('#score', { scale: 1.06, transformOrigin: '0% 40%' }, { scale: 1, duration: B(2), ease: 'power2.out' }, B(6));
+  // ================= score (bar 4): Cowlitz River 76, on the site's paper
+  tl.addLabel('scene:score', B(12));
+  tl.set('#ans', { autoAlpha: 0 }, B(12));
+  tl.set('#score', { autoAlpha: 1 }, B(12));
+  tl.set('#paper', { autoAlpha: 1 }, B(12));
+  tl.set('#glowWrap', { autoAlpha: 0 }, B(12));
+  tl.fromTo('#ring', { scale: 1.35, transformOrigin: '50% 50%' }, { scale: 1, duration: B(1.4), ease: 'expo.out' }, B(12));
+  OM.sfx('hit', B(12), { gain: .5, pan: .15 });
+  tl.fromTo('#score', { scale: 1.07, transformOrigin: '0% 40%' }, { scale: 1, duration: B(4), ease: 'sine.out' }, B(12));
   const sc = { v: 0 };
-  tl.fromTo(sc, { v: 0 }, { v: V.score, duration: B(1.1), ease: 'expo.out',
-    onUpdate: () => { $('#scoreNum').textContent = String(Math.round(sc.v)); $('#arc').setAttribute('stroke-dashoffset', (716.3 * (1 - sc.v / 100)).toFixed(1)); } }, B(6));
-  tl.fromTo('#score .water', { autoAlpha: 0, x: 60 }, { autoAlpha: 1, x: 0, duration: B(1) }, B(6.5));
-  tl.fromTo('#score .reach', { autoAlpha: 0, x: 60 }, { autoAlpha: 1, x: 0, duration: B(1) }, B(6.8));
-  OM.sfx('thud', B(7), { gain: .55 });
+  tl.fromTo(sc, { v: 0 }, { v: V.score, duration: B(1.4), ease: 'expo.out',
+    onUpdate: () => { $('#scoreNum').textContent = String(Math.round(sc.v)); $('#arc').setAttribute('stroke-dashoffset', (716.3 * (1 - sc.v / 100)).toFixed(1)); } }, B(12));
+  tl.fromTo('#score .water', { autoAlpha: 0, x: 60 }, { autoAlpha: 1, x: 0, duration: B(1) }, B(12.6));
+  tl.fromTo('#score .reach', { autoAlpha: 0, x: 60 }, { autoAlpha: 1, x: 0, duration: B(1) }, B(13));
+  OM.sfx('thud', B(13.2), { gain: .55 });
 
-  // ================= burst: the four inputs stack on the beat (1, 1, 1, ½)
-  tl.addLabel('scene:burst', B(8));
-  tl.set('#score', { autoAlpha: 0 }, B(8));
-  tl.set('#paper', { autoAlpha: 0 }, B(8));
-  tl.set('#glowWrap', { autoAlpha: .55 }, B(8));
-  const ROW_AT = [8, 9, 10, 10.5];
+  // ================= burst (bars 5–6): the four inputs stack one per beat, hold a beat, then the stop
+  tl.addLabel('scene:burst', B(16));
+  tl.set('#score', { autoAlpha: 0 }, B(16));
+  tl.set('#paper', { autoAlpha: 0 }, B(16));
+  tl.set('#glowWrap', { autoAlpha: .55 }, B(16));
+  const ROW_AT = [16, 17, 18, 19];
   rows.forEach((el, i) => {
     tl.fromTo(el, { autoAlpha: 0, x: 90, scale: 1.12 }, { autoAlpha: 1, x: 0, scale: 1, duration: B(.6), ease: 'expo.out', immediateRender: false }, B(ROW_AT[i]));
     OM.sfx('pop', B(ROW_AT[i]), { gain: .5, note: [1, 2, 3, 5][i], pan: -.15 + i * .1 });
-    tl.to('#rows', { scale: 1 + (i + 1) * .035, duration: B(.4), ease: 'expo.out' }, B(ROW_AT[i]));
+    tl.to('#rows', { scale: 1 + (i + 1) * .03, duration: B(.4), ease: 'expo.out' }, B(ROW_AT[i]));
     tl.fromTo('#fishSwim img', { y: -22 }, { y: 0, duration: B(.45), ease: 'power2.out', immediateRender: false }, B(ROW_AT[i]));
   });
+  tl.to('#rows', { scale: 1.15, duration: B(.4), ease: 'expo.out' }, B(20));   // one more step on the held beat
   // the stop: every row flies into the fish's sun, then nothing moves for half a beat
   const SUN = { x: 813, y: 405 };
   rows.forEach((el, i) => {
     const cy = ROW_TOP[i] + 50;
-    tl.to(el, { x: SUN.x - 300, y: SUN.y - cy, scale: .04, autoAlpha: 0, duration: B(.5), ease: 'power3.in' }, B(11) + (3 - i) * .025);
+    tl.to(el, { x: SUN.x - 300, y: SUN.y - cy, scale: .04, autoAlpha: 0, duration: B(.5), ease: 'power3.in' }, B(21) + (3 - i) * .025);
   });
-  OM.sfx('slide', B(11.35), { gain: .4 });
-  tl.to('#glowWrap', { scale: 1.35, autoAlpha: 1, duration: B(.5), ease: 'power2.in' }, B(11.3));
+  OM.sfx('slide', B(21.35), { gain: .4 });
+  tl.to('#glowWrap', { scale: 1.35, autoAlpha: 1, duration: B(.5), ease: 'power2.in' }, B(21.3));
 
-  // ================= drop: the site's hero, rebuilt for the phone
-  tl.addLabel('scene:drop', B(12));
-  tl.set('#hero', { autoAlpha: 1 }, B(12));
-  tl.to('#fish', { ...POSE.nav, duration: B(1.4), ease: OM.spring(0.12) }, B(12));
-  tl.to('#glowWrap', { autoAlpha: 0, duration: B(.6) }, B(12));
-  tl.to('#plate', { y: 0, duration: B(1.8), ease: 'expo.out' }, B(12));
-  tl.fromTo('#plate img', { scale: 1.14 }, { scale: 1, duration: B(8), ease: 'power1.out' }, B(12));
-  tl.fromTo('#hero', { scale: 1 }, { scale: 1.035, transformOrigin: '0% 40%', duration: B(7), ease: 'none', immediateRender: false }, B(13));
-  tl.fromTo('#head .l1', { yPercent: 160 }, { yPercent: 0, duration: B(.9), ease: 'expo.out', immediateRender: false }, B(12));
-  tl.fromTo('#head', { scale: 1.08, transformOrigin: '0% 50%' }, { scale: 1, duration: B(1.4), ease: 'expo.out' }, B(12));
-  OM.sfx('impact', B(12), { gain: .7 });
-  tl.fromTo('#hero .eyebrow', { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: B(1), immediateRender: false }, B(12.5));
-  tl.fromTo('#nav', { autoAlpha: 0, x: -24 }, { autoAlpha: 1, x: 0, duration: B(1), immediateRender: false }, B(12.6));
-  tl.fromTo('#head .l2', { yPercent: 160 }, { yPercent: 0, duration: B(.9), ease: 'expo.out', immediateRender: false }, B(13));
-  OM.sfx('whoosh', B(13), { gain: .35, pan: .2 });
+  // ================= drop (bar 7, 3/4): the site's hero, rebuilt for the phone
+  tl.addLabel('scene:drop', B(22));
+  tl.set('#hero', { autoAlpha: 1 }, B(22));
+  tl.to('#fish', { ...POSE.nav, duration: B(1.4), ease: OM.spring(0.12) }, B(22));
+  tl.to('#glowWrap', { autoAlpha: 0, duration: B(.6) }, B(22));
+  tl.to('#plate', { y: 0, duration: B(1.8), ease: 'expo.out' }, B(22));
+  tl.fromTo('#plate img', { scale: 1.14 }, { scale: 1, duration: B(7), ease: 'power1.out' }, B(22));
+  tl.fromTo('#hero', { scale: 1 }, { scale: 1.035, transformOrigin: '0% 40%', duration: B(6), ease: 'none', immediateRender: false }, B(23));
+  tl.fromTo('#head .l1', { yPercent: 160 }, { yPercent: 0, duration: B(.9), ease: 'expo.out', immediateRender: false }, B(22));
+  tl.fromTo('#head', { scale: 1.08, transformOrigin: '0% 50%' }, { scale: 1, duration: B(1.4), ease: 'expo.out' }, B(22));
+  OM.sfx('impact', B(22), { gain: .7 });
+  tl.fromTo('#hero .eyebrow', { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: B(1), immediateRender: false }, B(22.5));
+  tl.fromTo('#nav', { autoAlpha: 0, x: -24 }, { autoAlpha: 1, x: 0, duration: B(1), immediateRender: false }, B(22.6));
+  tl.fromTo('#head .l2', { yPercent: 160 }, { yPercent: 0, duration: B(.9), ease: 'expo.out', immediateRender: false }, B(23));
+  OM.sfx('whoosh', B(23), { gain: .35, pan: .2 });
 
-  // ================= end: the address
-  tl.addLabel('scene:end', B(16));
-  tl.to('#hero', { y: -36, duration: B(1), ease: 'expo.out' }, B(16));
-  tl.fromTo('#url', { autoAlpha: 0, y: 60, scale: .92 }, { autoAlpha: 1, y: 0, scale: 1, duration: B(1.2), ease: 'back.out(1.5)', immediateRender: false }, B(16));
-  OM.sfx('pop', B(16) + .06, { gain: .5, note: 5 });
-  OM.sfx('chime', B(17), { gain: .45 });
-  tl.to({}, { duration: B(20) - tl.duration() > 0 ? B(20) - tl.duration() : 0 }, tl.duration()); // run to beat 20
+  // ================= end (bar 8): the address, held 2 s
+  tl.addLabel('scene:end', B(25));
+  tl.to('#hero', { y: -36, duration: B(1), ease: 'expo.out' }, B(25));
+  tl.fromTo('#url', { autoAlpha: 0, y: 60, scale: .92 }, { autoAlpha: 1, y: 0, scale: 1, duration: B(1.2), ease: 'back.out(1.5)', immediateRender: false }, B(25));
+  OM.sfx('pop', B(25) + .06, { gain: .5, note: 5 });
+  OM.sfx('chime', B(26), { gain: .45 });
+  tl.to({}, { duration: Math.max(0, B(29) - tl.duration()) }, tl.duration()); // run to beat 29
 
   window.__timelines['film'] = tl;
 </script>

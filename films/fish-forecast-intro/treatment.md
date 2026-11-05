@@ -1,7 +1,9 @@
 # Treatment · Oregon Fish Forecast intro
 
 Direction **A · The forecast clears** (chosen by default: the user said "run it" without picking; B and C stay on the table).
-1080 × 1920, 9:16 for TikTok and Reels, 20 beats at 118 BPM = 10.17 s, no narration, ends on the site address.
+1080 × 1920, 9:16 for TikTok and Reels, no narration, ends on the site address.
+
+**v7 timing (current):** 29 beats at 118 BPM = 14.75 s, after Kenny's note on v4: "it flashes text too fast, i dont think viewers can read it. extend it to 13-15seconds if needed". Every text screen now holds about 2 s: hook + question bars 1–2 (0–4.07 s, question on screen ~2.4 s, underline on beat 6), 4,496 bar 3 (4.07–6.10), Cowlitz 76 bar 4 (6.10–8.14), the four inputs bar 5 one per beat plus a held beat in a 2/4 bar 6 (8.14–10.68, stop in its last half beat), drop in a 3/4 bar 7 (11.19–12.71), address bar 8 (12.71–14.75). The tables below are the original 10 s plan.
 
 Keep the TikTok overlays clear: nothing that must be read below y ≈ 1450 (caption and username) or in the right 130 px (buttons). The river artwork fills the bottom: decoration may sit under the overlays, text may not.
 
