@@ -19,3 +19,5 @@ What the film is made of, and where each piece came from. Real material first: t
 - Real numbers on the page (data snapshot): 31 reaches · 12 regions; top scores Cowlitz River 76 (Barrier Dam to Blue Creek), Crooked River 72, Diamond Lake 70, Lower Deschutes 70; Bonneville Dam 4,496 adult Chinook, coho and steelhead in the 7 days to Nov 3; The Dalles 3,691; Willamette Falls 442; 578 Facebook posts and 48 TikTok videos read.
 - Type: Fraunces (display, italic for the accent phrase), Instrument Sans (body), JetBrains Mono (eyebrows, numbers). Colours: forest ink oklch(0.3056 0.0641 163.5), deep forest oklch(0.21 0.045 166), sun yellow oklch(0.91 0.18 103), paper oklch(0.974 0.012 95), river blue (italic accents on light pages).
 - Lines: "Read the river before you drive." · "Are the fish in the river yet?" · "Worth the drive this week." · "Every water, one reach at a time." · "See you by the water."
+
+- Main domain (from Kenny, 2026-11-05): ORFishForecast.com. The end card uses it instead of the GitHub Pages address.

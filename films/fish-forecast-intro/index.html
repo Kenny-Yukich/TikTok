@@ -13,8 +13,8 @@
   {"id":"heroEyebrow","type":"string","label":"Hero eyebrow","default":"Oregon & SW Washington · 31 reaches","group":"Hero"},
   {"id":"head1","type":"string","label":"Headline, line 1","default":"Read the river","group":"Hero"},
   {"id":"head2","type":"string","label":"Headline, line 2 (italic)","default":"before you drive.","group":"Hero"},
-  {"id":"url1","type":"string","label":"Address, line 1","default":"kenny-yukich.github.io/","group":"End"},
-  {"id":"url2","type":"string","label":"Address, line 2","default":"oregon-fish-forecast-concept","group":"End"},
+  {"id":"url1","type":"string","label":"Address","default":"ORFishForecast.com","group":"End"},
+  {"id":"url2","type":"string","label":"Address, second line (optional)","default":"","group":"End"},
   {"id":"sun","type":"color","label":"Sun yellow","default":"#F8E532","group":"Colour"}
 ]'>
 <head>
@@ -93,9 +93,10 @@
   #plate { left: 40px; top: 1190px; width: 1000px; height: 760px; border-radius: 34px 34px 0 0; overflow: hidden; background: var(--plate); }
   #plate img { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 62%; transform-origin: 50% 40%; }
 
-  #url { left: 80px; top: 858px; display: flex; align-items: center; gap: 30px; padding: 28px 36px 28px 38px; border-radius: 28px; background: var(--sun); color: var(--ink-deep); transform-origin: 0 50%; }
-  #url .t { font: 500 40px/1.28 var(--mono); letter-spacing: -0.01em; white-space: nowrap; }
-  #url svg { width: 56px; height: 56px; flex: none; }
+  #url { left: 80px; top: 870px; display: flex; align-items: center; gap: 28px; padding: 30px 40px 30px 44px; border-radius: 999px; background: var(--sun); color: var(--ink-deep); transform-origin: 0 50%; }
+  #url .t { font: 600 60px/1.1 var(--sans); letter-spacing: -0.015em; white-space: nowrap; }
+  #url .t div:empty { display: none; }
+  #url svg { width: 60px; height: 60px; flex: none; }
 </style>
 </head>
 <body>
@@ -146,7 +147,7 @@
   <div id="nav" class="abs" data-om-id="wordmark">Oregon <em>Fish Forecast</em></div>
 
   <div id="url" class="abs" data-om-id="address">
-    <div class="t"><div data-var-text="url1">kenny-yukich.github.io/</div><div data-var-text="url2">oregon-fish-forecast-concept</div></div>
+    <div class="t"><div data-var-text="url1">ORFishForecast.com</div><div data-var-text="url2"></div></div>
     <svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M18 15V6H9"/></svg>
   </div>
 
