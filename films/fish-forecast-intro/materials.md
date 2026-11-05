@@ -21,3 +21,4 @@ What the film is made of, and where each piece came from. Real material first: t
 - Lines: "Read the river before you drive." · "Are the fish in the river yet?" · "Worth the drive this week." · "Every water, one reach at a time." · "See you by the water."
 
 - Main domain (from Kenny, 2026-11-05): ORFishForecast.com. The end card uses it instead of the GitHub Pages address.
+- Oregon waters only (Kenny, 2026-11-05: "dont put any washington state waters in any of our clips"). The score screen shows Crooked River 72 (Bowman Dam to Castle Rock Campground, Central Oregon, reported Oct 8), the top Oregon score; the hero eyebrow counts the 24 Oregon reaches. The Bonneville count is on the Columbia, the Oregon border river.

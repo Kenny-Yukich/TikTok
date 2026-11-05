@@ -5,12 +5,12 @@
   {"id":"countEyebrow","type":"string","label":"Count label","default":"Bonneville Dam · 7 days to Nov 3","group":"Answer"},
   {"id":"count","type":"number","label":"Fish counted","default":4496,"min":0,"max":99999,"step":1,"group":"Answer"},
   {"id":"countText","type":"string","label":"Count caption","default":"adult Chinook, coho and steelhead counted climbing the ladder.","group":"Answer"},
-  {"id":"score","type":"number","label":"Fishing score","default":76,"min":0,"max":100,"step":1,"group":"Answer"},
+  {"id":"score","type":"number","label":"Fishing score","default":72,"min":0,"max":100,"step":1,"group":"Answer"},
   {"id":"scoreWord","type":"string","label":"Score label","default":"Good","group":"Answer"},
-  {"id":"water","type":"string","label":"Water","default":"Cowlitz River","group":"Answer"},
-  {"id":"reach","type":"string","label":"Reach","default":"Barrier Dam to Blue Creek","group":"Answer"},
+  {"id":"water","type":"string","label":"Water","default":"Crooked River","group":"Answer"},
+  {"id":"reach","type":"string","label":"Reach","default":"Bowman Dam to Castle Rock Campground","group":"Answer"},
   {"id":"rows","type":"string","label":"The four inputs (|-separated)","default":"Fishing reports|River gauges|Dam counts|Trout stocking","group":"Burst"},
-  {"id":"heroEyebrow","type":"string","label":"Hero eyebrow","default":"Oregon & SW Washington · 31 reaches","group":"Hero"},
+  {"id":"heroEyebrow","type":"string","label":"Hero eyebrow","default":"24 Oregon reaches · refreshed every morning","group":"Hero"},
   {"id":"head1","type":"string","label":"Headline, line 1","default":"Read the river","group":"Hero"},
   {"id":"head2","type":"string","label":"Headline, line 2 (italic)","default":"before you drive.","group":"Hero"},
   {"id":"url1","type":"string","label":"Address","default":"ORFishForecast.com","group":"End"},
@@ -130,14 +130,14 @@
     </div>
     <div class="abs eyebrow">Fishing score</div>
     <div class="abs word" data-var-text="scoreWord">Good</div>
-    <h2 class="abs display water" data-var-text="water">Cowlitz River</h2>
-    <div class="abs reach" data-var-text="reach">Barrier Dam to Blue Creek</div>
+    <h2 class="abs display water" data-var-text="water">Crooked River</h2>
+    <div class="abs reach" data-var-text="reach">Bowman Dam to Castle Rock Campground</div>
   </section>
 
   <section id="rows" data-om-var="rows"></section>
 
   <section id="hero" data-om-id="headline">
-    <div class="abs eyebrow" id="heroEyebrow" data-var-text="heroEyebrow">Oregon &amp; SW Washington · 31 reaches</div>
+    <div class="abs eyebrow" id="heroEyebrow" data-var-text="heroEyebrow">24 Oregon reaches · refreshed every morning</div>
     <h1 id="head" class="abs display">
       <span class="mask"><span class="l1" data-var-text="head1">Read the river</span></span>
       <span class="mask"><span class="l2"><em data-var-text="head2">before you drive.</em></span></span>
@@ -282,7 +282,7 @@ z8 | z8 | z8 | z8 | z8 | [M:2/4] z4 | [M:3/4] [K:D] !mp! [DFAd]6 | [M:4/4] [DGBd
   tl.fromTo('#ans .lbl', { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: B(1) }, B(8.6));
   OM.sfx('count', B(9.1), { gain: .45 });
 
-  // ================= score (bar 4): Cowlitz River 76, on the site's paper
+  // ================= score (bar 4): Crooked River 72 (Oregon waters only), on the site paper
   tl.addLabel('scene:score', B(12));
   tl.set('#ans', { autoAlpha: 0 }, B(12));
   tl.set('#score', { autoAlpha: 1 }, B(12));

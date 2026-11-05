@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en" data-composition-variables='[
+  {"id":"eyebrow","type":"string","label":"Eyebrow","default":"ODFW trout stocking · Nov 2–6","group":"Hook"},
+  {"id":"q1","type":"string","label":"Title, line 1","default":"Fresh trout,","group":"Hook"},
+  {"id":"q2","type":"string","label":"Title, line 2 (italic)","default":"this week.","group":"Hook"},
+  {"id":"total","type":"number","label":"Trout this week","default":2650,"min":0,"max":999999,"step":1,"group":"Data"},
+  {"id":"totalText","type":"string","label":"Total caption","default":"trout going into 3 Oregon waters","group":"Data"},
+  {"id":"waters","type":"string","label":"Waters (JSON, from data/stocking.js)","default":"[{\"name\":\"Walter Wirth Lake\",\"zone\":\"Willamette · Corvallis\",\"n\":1000},{\"name\":\"Timber Linn Lake\",\"zone\":\"Willamette · Corvallis\",\"n\":900},{\"name\":\"Alton Baker Canal\",\"zone\":\"Willamette · Springfield\",\"n\":750}]","group":"Data"},
+  {"id":"tag1","type":"string","label":"End line (roman)","default":"Find","group":"End"},
+  {"id":"tag2","type":"string","label":"End line (italic)","default":"today’s water.","group":"End"},
+  {"id":"url1","type":"string","label":"Address","default":"ORFishForecast.com","group":"End"}
+]'>
+<head>
+<meta charset="utf-8">
+<title>Oregon Fish Forecast · Trout stocking</title>
+<script src="vendor/gsap.min.js"></script>
+<script src="vendor/om.js"></script>
+<style id="om-fonts">
+@font-face { font-family: "Fraunces"; src: url("assets/fonts/Fraunces-full.woff2") format("woff2"); font-weight: 100 900; font-style: normal; }
+@font-face { font-family: "Fraunces"; src: url("assets/fonts/Fraunces-full-italic.woff2") format("woff2"); font-weight: 100 900; font-style: italic; }
+@font-face { font-family: "Instrument Sans"; src: url("assets/fonts/InstrumentSans-wght.woff2") format("woff2"); font-weight: 400 700; font-style: normal; }
+@font-face { font-family: "JetBrains Mono"; src: url("assets/fonts/JetBrainsMono-wght.woff2") format("woff2"); font-weight: 100 800; font-style: normal; }
+</style>
+<style>
+  :root { --ink: #023926; --ink-deep: #001F13; --on-ink: #ECF1E2; --on-ink-muted: #A8BEAC; --sun: #F8E532; --plate: #F9F7EE;
+          --paper: #F9F7EE; --text: #0A251A; --muted: #4E6559; --river: #0486D3; --river-deep: #1545A2;
+          --display: 'Fraunces', Georgia, serif; --sans: 'Instrument Sans', sans-serif; --mono: 'JetBrains Mono', monospace; }
+  html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: var(--paper); }
+  #film { position: relative; width: 1080px; height: 1920px; overflow: hidden; color: var(--text); font-family: var(--sans);
+          background: radial-gradient(1000px 800px at 70% 20%, #FFFDF4, var(--paper) 60%, #EFEBDD); -webkit-font-smoothing: antialiased; }
+  .abs { position: absolute; }
+  .eyebrow { font: 500 26px/1.3 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .display { font-family: var(--display); font-weight: 360; font-variation-settings: 'opsz' 144, 'SOFT' 30; letter-spacing: -0.035em; line-height: .92; margin: 0; }
+  .display em { font-style: italic; font-weight: 300; color: var(--river-deep); }
+  .mask { display: block; overflow: hidden; padding-bottom: .36em; margin-bottom: -.36em; }
+  .mask > span { display: block; }
+
+  /* the water the trout go into: one band across the film */
+  #water { left: 0; top: 1300px; width: 1080px; height: 620px; }
+  #pool { left: 0; top: 0; width: 1080px; height: 1336px; overflow: hidden; }   /* the fish vanishes below the waterline */
+  #fish { left: 0; top: 0; width: 340px; height: 164px; transform-origin: 50% 50%; }
+  #fish img { width: 100%; height: 100%; filter: drop-shadow(0 14px 16px rgba(20, 50, 90, .3)); }
+  .splash { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; pointer-events: none; }
+  .drop { position: absolute; width: 16px; height: 16px; margin: -8px 0 0 -8px; border-radius: 50%; background: var(--river); }
+  .pebble { position: absolute; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%; background: var(--river-deep); }
+
+  #hook { position: absolute; inset: 0; }
+  #hook .eyebrow { left: 84px; top: 300px; }
+  #q { left: 74px; top: 350px; font-size: 150px; width: 940px; }
+  #q .l2 { padding-left: 70px; }
+
+  #tot { position: absolute; inset: 0; }
+  #tot .eyebrow { left: 84px; top: 330px; }
+  #totNum { left: 70px; top: 380px; font: 400 270px/.9 var(--mono); letter-spacing: -0.06em; color: var(--river-deep); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  #tot .cap { left: 84px; top: 650px; width: 860px; font: 400 64px/1.05 var(--display); letter-spacing: -0.02em; }
+  #tot .fine { left: 84px; top: 820px; font-size: 22px; }
+
+  .wa { position: absolute; inset: 0; }
+  .wa .eyebrow { left: 84px; top: 330px; }
+  .wa h2 { left: 76px; top: 378px; font-size: 96px; white-space: nowrap; }
+  .wa .n { left: 70px; top: 520px; font: 400 230px/.9 var(--mono); letter-spacing: -0.06em; color: var(--river-deep); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .wa .cap { left: 84px; top: 750px; font: 500 44px/1.2 var(--sans); }
+  .wa .chip { left: 84px; top: 840px; display: flex; align-items: center; gap: 14px; padding: 14px 24px 14px 18px; border-radius: 999px; border: 2px solid rgba(2, 57, 38, .22); font: 500 28px/1 var(--mono); color: var(--muted); }
+  .wa .chip svg { width: 34px; height: 34px; color: var(--river-deep); }
+
+  /* end card, on the site's forest */
+  #forest { position: absolute; inset: 0; background: radial-gradient(900px 800px at 78% 22%, rgba(46, 96, 52, .5), transparent 70%), linear-gradient(180deg, var(--ink-deep), #00261A 60%, #002A1C); }
+  #plate { left: 40px; top: 1190px; width: 1000px; height: 760px; border-radius: 34px 34px 0 0; overflow: hidden; background: var(--plate); }
+  #plate img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 62%; transform-origin: 50% 40%; }
+  #end { position: absolute; inset: 0; text-align: center; color: var(--on-ink); }
+  #end .display em { color: var(--sun); }
+  #efish { left: 300px; top: 300px; width: 480px; height: 232px; }
+  #efish img { width: 100%; height: 100%; filter: drop-shadow(0 24px 30px rgba(0, 12, 6, .55)); }
+  #word { left: 0; width: 1080px; top: 572px; font: 500 64px/1 var(--display); letter-spacing: -0.01em; }
+  #word em { font-style: italic; font-weight: 400; }
+  #tag { left: 0; width: 1080px; top: 680px; font-size: 96px; }
+  #url { left: 50%; top: 860px; display: flex; align-items: center; gap: 28px; padding: 30px 40px 30px 44px; border-radius: 999px; background: var(--sun); color: var(--ink-deep); white-space: nowrap; }
+  #url .t { font: 600 60px/1.1 var(--sans); letter-spacing: -0.015em; }
+  #url svg { width: 60px; height: 60px; flex: none; }
+</style>
+</head>
+<body>
+<div id="film" data-composition-id="film" data-width="1080" data-height="1920">
+  <audio id="om-sound" src="assets/sound.wav" data-start="0" data-duration="13.333" data-track-index="8" data-volume="1"></audio>
+  <svg id="water" class="abs" viewBox="0 0 1080 620" data-om-id="water">
+    <g id="wave"><path d="M0 36 C 90 20, 180 52, 270 36 S 450 20, 540 36 S 720 52, 810 36 S 990 20, 1080 36 S 1260 52, 1350 36 L 1350 620 L 0 620 Z" fill="#0486D3"/>
+    <path d="M0 36 C 90 20, 180 52, 270 36 S 450 20, 540 36 S 720 52, 810 36 S 990 20, 1080 36 S 1260 52, 1350 36" fill="none" stroke="#1545A2" stroke-width="8"/></g>
+    <g stroke="#F9F7EE" stroke-width="5" stroke-linecap="round" opacity=".8"><path d="M120 92 h70"/><path d="M330 120 h44"/><path d="M560 88 h90"/><path d="M800 128 h56"/><path d="M930 84 h60"/><path d="M60 210 h90"/><path d="M420 250 h60"/><path d="M700 220 h110"/><path d="M220 360 h70"/><path d="M880 330 h70"/><path d="M520 430 h90"/></g>
+  </svg>
+  <div id="splashes"></div>
+
+  <section id="hook" data-om-id="title">
+    <div class="abs eyebrow" data-var-text="eyebrow">ODFW trout stocking · Nov 2–6</div>
+    <h1 id="q" class="abs display">
+      <span class="mask"><span class="l1" data-var-text="q1">Fresh trout,</span></span>
+      <span class="mask"><span class="l2"><em data-var-text="q2">this week.</em></span></span>
+    </h1>
+  </section>
+
+  <section id="tot" data-om-id="total">
+    <div class="abs eyebrow">This week’s plan</div>
+    <div id="totNum" class="abs" data-om-var="total">2,650</div>
+    <div class="abs cap display" data-var-text="totalText">trout going into 3 Oregon waters</div>
+    <div class="abs eyebrow fine">Planned by ODFW · not confirmed releases</div>
+  </section>
+
+  <div id="wlist"></div>
+
+  <div id="pool" class="abs"><div id="fish" class="abs" data-om-id="fish"><img src="assets/weather-fish.webp" alt=""></div></div>
+
+  <div id="forest" data-om-id="forest"></div>
+  <div id="plate" class="abs" data-om-id="artwork"><img src="assets/river-country.webp" alt=""></div>
+  <section id="end" data-om-id="end">
+    <div id="efish" class="abs" data-om-id="end-fish"><img src="assets/weather-fish.webp" alt="Oregon Fish Forecast"></div>
+    <div id="word" class="abs" data-om-id="wordmark">Oregon <em>Fish Forecast</em></div>
+    <h2 id="tag" class="abs display" data-om-id="tagline"><span data-var-text="tag1">Find</span> <em data-var-text="tag2">today’s water.</em></h2>
+    <div id="url" class="abs" data-om-id="address"><div class="t" data-var-text="url1">ORFishForecast.com</div>
+      <svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M18 15V6H9"/></svg></div>
+  </section>
+</div>
+
+<script type="text/vnd.abc" id="om-score">
+X:1
+T:Oregon Fish Forecast · Trout stocking (kalimba and harp, 126)
+M:4/4
+L:1/8
+Q:1/4=126
+K:G
+V:KA inst=kalimba gain=0.7
+!mark:hook! !mp! GBdg dBGB | [M:2/4] GBdg | [M:4/4] !mark:total! !mf! cegc' gece | !mark:w1! EGBe BGEG | !mark:w2! cegc' gece | !mark:w3! !f! A^cea ^cA^c z | [M:4/4] [K:D] !mark:end! !ff! DFAd AFDF | [M:2/4] DFAd |]
+V:UK inst=harp gain=0.5
+z8 | [M:2/4] z4 | [M:4/4] !mf! z[ceg] z[ceg] z[ceg] z[ceg] | z[EGB] z[EGB] z[EGB] z[EGB] | z[ceg] z[ceg] z[ceg] z[ceg] | !f! z[A^ce] z[A^ce] z[A^ce] z2 | [M:4/4] [K:D] !f! z[DFA] z[DFA] z[DFA] z[DFA] | [M:2/4] z[DFA] z2 |]
+V:BS inst=sinebass gain=0.8
+!mp! G,,4 G,,4 | [M:2/4] G,,4 | [M:4/4] !mf! C,2 C,C, C,2 G,,2 | E,,2 E,,E,, E,,2 B,,2 | C,2 C,C, C,2 G,,2 | !f! A,,2 A,,A,, A,,2 z2 | [M:4/4] [K:D] !ff! D,,2 D,,D,, D,,2 A,,2 | [M:2/4] D,,4 |]
+V:DR inst=drums kit=acoustic gain=0.85
+!mp! C,,2 ^D,,2 C,,2 ^D,,2 | [M:2/4] C,,2 ^D,,2 | [M:4/4] !mf! C,,2 ^D,,2 C,, C,, ^D,,2 | C,,2 ^D,,2 C,, C,, ^D,,2 | !f! C,, ^D,, C,, ^D,, C,, ^D,, C,, ^D,, | C,, ^D,, C,, ^D,, C,, ^D,, [C,,^D,,] !rise(! z | [M:4/4] !rise)! !hit! !ff! [C,,^C,]2 ^D,,2 C,,2 ^D,,2 | [M:2/4] [C,,^C,]2 z2 |]
+V:SH inst=drums kit=acoustic gain=0.35
+!p! ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, | [M:2/4] ^F,, ^F,, ^F,, ^F,, | [M:4/4] !mp! ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, | ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, | !f! ^F,,/^F,,/^F,,/^F,,/ ^F,,/^F,,/^F,,/^F,,/ ^F,,/^F,,/^F,,/^F,,/ ^F,,/^F,,/^F,,/^F,,/ | ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, z | [M:4/4] !f! ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, ^F,, | [M:2/4] z4 |]
+V:GL inst=glock role=melody gain=0.55
+!mp! z2 g2 z2 d'2 | [M:2/4] z4 | [M:4/4] z8 | b2 z6 | c'2 z6 | ^c'2 z6 | [M:4/4] [K:D] z2 A d e a3 | [M:2/4] z4 |]
+</script>
+
+<script>
+  const V = OM.vars();
+  OM.music({ bpm: 126 });
+  const B = (n) => OM.beat(n);
+  const $ = (s) => document.querySelector(s);
+  const fmt = (n) => Math.round(n).toLocaleString('en-US');
+  const esc = (s) => String(s).replace(/[<>&]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' })[c]);
+  const WATERLINE = 1336;
+
+  // ---- the waters
+  const CAL = '<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M2 12C2 8.22876 2 6.34315 3.17157 5.17157C4.34315 4 6.22876 4 10 4H14C17.7712 4 19.6569 4 20.8284 5.17157C22 6.34315 22 8.22876 22 12V14C22 17.7712 22 19.6569 20.8284 20.8284C19.6569 22 17.7712 22 14 22H10C6.22876 22 4.34315 22 3.17157 20.8284C2 19.6569 2 17.7712 2 14V12Z M7 4V2.5 M17 4V2.5 M2.5 9H21.5"/>';
+  const W = JSON.parse(V.waters);
+  $('#wlist').innerHTML = W.map((w, k) =>
+    `<section class="wa" data-om-id="water-${k + 1}"><div class="abs eyebrow">${esc(w.zone)} zone</div><h2 class="abs display">${esc(w.name)}</h2>` +
+    `<div class="abs n">${fmt(w.n)}</div><div class="abs cap">legal-size trout</div>` +
+    `<div class="abs chip"><svg viewBox="0 0 24 24">${CAL}</svg>Week of Nov 2–6</div></section>`).join('');
+  const panels = gsap.utils.toArray('.wa');
+
+  // ---- splashes: three ripples and a spray of drops, seeded so every frame is the same every time
+  const rnd = OM.random(11);
+  const SPL = [];
+  const mkSplash = (x, big) => {
+    const id = SPL.length;
+    const drops = Array.from({ length: big ? 9 : 5 }, () => ({ dx: (rnd() - .5) * (big ? 260 : 140), h: (big ? 140 : 80) + rnd() * (big ? 120 : 60), s: .6 + rnd() * .8 }));
+    const el = document.createElement('div');
+    el.className = 'splash';
+    el.innerHTML = `<svg width="1080" height="1920" style="position:absolute;inset:0">${[0, 1, 2].map((r) => `<ellipse class="rip" cx="${x}" cy="${WATERLINE + 2}" rx="20" ry="5" opacity="0" fill="none" stroke="#F9F7EE" stroke-width="${6 - r}"/>`).join('')}</svg>` +
+      drops.map((d) => `<div class="drop" style="left:${x}px; top:${WATERLINE}px; opacity:0; visibility:hidden; transform: scale(${d.s.toFixed(2)})"></div>`).join('');
+    $('#splashes').appendChild(el);
+    SPL.push({ el, x, drops, big });
+    return id;
+  };
+  const splash = (id, at) => {
+    const s = SPL[id];
+    const rips = s.el.querySelectorAll('.rip');
+    rips.forEach((r, i) => tl.fromTo(r, { attr: { rx: 20, ry: 5 }, opacity: .95 }, { attr: { rx: s.big ? 240 : 150, ry: s.big ? 44 : 28 }, opacity: 0, duration: B(2.2), ease: 'power2.out', immediateRender: false }, at + i * B(.3)));
+    s.el.querySelectorAll('.drop').forEach((d, i) => {
+      const p = s.drops[i];
+      tl.fromTo(d, { x: 0, y: 0, autoAlpha: 1 }, { x: p.dx, duration: B(1.4), ease: 'power1.out', immediateRender: false }, at);
+      tl.fromTo(d, { y: 0 }, { y: -p.h, duration: B(.6), ease: 'power2.out', immediateRender: false }, at);
+      tl.to(d, { y: 30, autoAlpha: 0, duration: B(.8), ease: 'power2.in' }, at + B(.6));
+    });
+  };
+
+  // ---- hidden until their moment
+  gsap.set('#q .l2', { yPercent: 160 });
+  gsap.set(['#tot', '.wa', '#forest', '#plate', '#end'], { autoAlpha: 0 });
+  gsap.set('#plate', { y: 820 });
+  gsap.set('#url', { xPercent: -50 });
+  gsap.set('.drop', { autoAlpha: 0 });
+  gsap.set('.rip', { opacity: 0 });
+
+  const tl = gsap.timeline({ paused: true, defaults: { ease: 'expo.out' } });
+
+  // a dive: the fish arcs in from the right and enters the water at x on beat `at`
+  const dive = (x, at, from, air) => {
+    tl.set('#fish', { x: from[0], y: from[1], rotation: from[2] }, at - air);
+    tl.to('#fish', { x: x - 170, duration: air, ease: 'none' }, at - air);
+    tl.to('#fish', { y: from[1] - 120, duration: air * .4, ease: 'power2.out' }, at - air);
+    tl.to('#fish', { y: WATERLINE + 40, duration: air * .6, ease: 'power2.in' }, at - air * .6);
+    tl.to('#fish', { rotation: 62, duration: air, ease: 'power1.in' }, at - air);
+    tl.to('#fish', { y: WATERLINE + 260, duration: B(.4), ease: 'none' }, at);
+  };
+
+  // ================= hook (beats 0–6): the first trout goes in
+  tl.addLabel('scene:hook', 0);
+  const s0 = mkSplash(540, true);
+  gsap.set('#fish', { x: 640, y: 860, rotation: 20 });                  // frame 0: already mid-dive
+  tl.to('#fish', { x: 540 - 170, duration: B(1), ease: 'none' }, 0);
+  tl.to('#fish', { y: WATERLINE + 40, duration: B(1), ease: 'power2.in' }, 0);
+  tl.to('#fish', { rotation: 62, duration: B(1), ease: 'power1.in' }, 0);
+  tl.to('#fish', { y: WATERLINE + 260, duration: B(.4), ease: 'none' }, B(1));
+  splash(s0, B(1));
+  OM.sfx('pop', B(1), { gain: .5, note: 1 });
+  OM.sfx('whoosh', B(.5), { gain: .3 });
+  tl.to('#q .l2', { yPercent: 0, duration: B(1) }, B(.5));
+  const sOut = mkSplash(640, false), sIn = mkSplash(900, true);
+  tl.set('#fish', { x: 640 - 170, y: WATERLINE + 60, rotation: -70 }, B(2.8));
+  tl.to('#fish', { x: 900 - 170, duration: B(1.6), ease: 'none' }, B(2.8));
+  tl.to('#fish', { y: 960, duration: B(.8), ease: 'power2.out' }, B(2.8));
+  tl.to('#fish', { y: WATERLINE + 60, duration: B(.8), ease: 'power2.in' }, B(3.6));
+  tl.to('#fish', { rotation: 66, duration: B(1.6), ease: 'sine.inOut' }, B(2.8));
+  tl.to('#fish', { y: WATERLINE + 280, duration: B(.4), ease: 'none' }, B(4.4));
+  splash(sOut, B(2.95)); splash(sIn, B(4.4));
+  OM.sfx('pop', B(2.95), { gain: .35, note: 5 });
+  OM.sfx('pop', B(4.4), { gain: .45, note: 3 });
+  tl.fromTo('#q', { scale: 1 }, { scale: 1.04, transformOrigin: '0% 50%', duration: B(6), ease: 'none', immediateRender: false }, 0);
+  tl.fromTo('#wave', { x: 0 }, { x: -60, duration: B(28), ease: 'none' }, 0);
+
+  // ================= total (beats 6–10): 2,650, and three drops for three waters
+  tl.addLabel('scene:total', B(6));
+  tl.set('#hook', { autoAlpha: 0 }, B(6));
+  tl.set('#tot', { autoAlpha: 1 }, B(6));
+  OM.sfx('hit', B(6), { gain: .5 });
+  const c = { v: 0 };
+  tl.fromTo(c, { v: 0 }, { v: V.total, duration: B(1.6), ease: 'expo.out', onUpdate: () => { $('#totNum').textContent = fmt(c.v); } }, B(6));
+  tl.fromTo('#totNum', { scale: 1.3, transformOrigin: '0% 55%' }, { scale: 1, duration: B(1.6) }, B(6));
+  tl.fromTo('#tot .cap', { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: B(1), immediateRender: false }, B(6.6));
+  tl.fromTo('#tot .fine', { autoAlpha: 0 }, { autoAlpha: 1, duration: B(1), immediateRender: false }, B(7.2));
+  OM.sfx('count', B(7), { gain: .4 });
+  [300, 540, 780].forEach((x, i) => {
+    const el = document.createElement('div'); el.className = 'pebble'; el.style.cssText = `left:${x}px; top:1000px`; $('#splashes').appendChild(el);
+    const sid = mkSplash(x, false);
+    const at = B(7 + i);
+    gsap.set(el, { autoAlpha: 0 });
+    tl.fromTo(el, { y: -80, autoAlpha: 1 }, { y: WATERLINE - 1000, duration: B(.6), ease: 'power2.in', immediateRender: false }, at - B(.6));
+    tl.set(el, { autoAlpha: 0 }, at);
+    splash(sid, at);
+    OM.sfx('pop', at, { gain: .35, note: [3, 5, 8][i], pan: -.4 + i * .4 });
+  });
+
+  // ================= the waters (beats 10–22), one per bar, each with its own trout
+  const FROM = [[1100, 980, -10], [1120, 1000, -10], [1100, 990, -10]];
+  const X = [620, 460, 640];
+  panels.forEach((p, k) => {
+    const at = B(10 + k * 4);
+    tl.addLabel(`scene:w${k + 1}`, at);
+    if (k === 0) tl.to('#tot', { y: -140, autoAlpha: 0, duration: B(.5), ease: 'power2.in' }, at - B(.4));
+    else tl.to(panels[k - 1], { y: -140, autoAlpha: 0, duration: B(.5), ease: 'power2.in' }, at - B(.4));
+    tl.fromTo(p, { y: 160, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: B(.9), immediateRender: false }, at);
+    const num = p.querySelector('.n');
+    const cc = { v: 0 };
+    tl.fromTo(cc, { v: 0 }, { v: W[k].n, duration: B(1.4), ease: 'expo.out', onUpdate: () => { num.textContent = fmt(cc.v); } }, at);
+    tl.fromTo(p.querySelector('.chip'), { autoAlpha: 0, x: -30 }, { autoAlpha: 1, x: 0, duration: B(1), immediateRender: false }, at + B(.8));
+    tl.fromTo(p, { scale: 1.04, transformOrigin: '0% 30%' }, { scale: 1, duration: B(4), ease: 'sine.out', immediateRender: false }, at);
+    const sid = mkSplash(X[k], true);
+    dive(X[k], at + B(.5), FROM[k], B(.9));
+    splash(sid, at + B(.5));
+    OM.sfx('pop', at + B(.5), { gain: .5, note: [1, 3, 5][k], pan: [.2, -.2, .25][k] });
+    OM.sfx('whoosh', at, { gain: .3, pan: .4 });
+  });
+  tl.to(panels[2], { autoAlpha: 0, duration: B(.4), ease: 'power2.in' }, B(21.5));
+
+  // ================= end (beats 22–28) on the site's forest
+  tl.addLabel('scene:end', B(22));
+  tl.set(['#forest', '#plate', '#end'], { autoAlpha: 1 }, B(22));
+  tl.set(['#water', '#splashes', '#pool'], { autoAlpha: 0 }, B(22));
+  tl.fromTo('#efish', { y: 700, rotation: -30, scale: .7 }, { y: 0, rotation: 0, scale: 1, duration: B(1.4), ease: OM.spring(0.14), immediateRender: false }, B(22));
+  tl.to('#plate', { y: 0, duration: B(1.8) }, B(22));
+  tl.fromTo('#plate img', { scale: 1.14 }, { scale: 1, duration: B(6), ease: 'power1.out' }, B(22));
+  OM.sfx('sparkle', B(22.7), { gain: .45 });
+  tl.fromTo('#word', { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: B(1), immediateRender: false }, B(22.6));
+  tl.fromTo('#tag', { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: B(1), immediateRender: false }, B(23));
+  tl.fromTo('#url', { autoAlpha: 0, y: 60, scale: .9 }, { autoAlpha: 1, y: 0, scale: 1, duration: B(1.2), ease: 'back.out(1.5)', immediateRender: false }, B(24));
+  OM.sfx('pop', B(24) + .06, { gain: .5, note: 5 });
+  tl.fromTo('#end', { scale: 1 }, { scale: 1.03, transformOrigin: '50% 35%', duration: B(5), ease: 'none', immediateRender: false }, B(23));
+  tl.to({}, { duration: Math.max(0, B(28) - tl.duration()) }, tl.duration());
+
+  window.__timelines['film'] = tl;
+</script>
+</body>
+</html>
