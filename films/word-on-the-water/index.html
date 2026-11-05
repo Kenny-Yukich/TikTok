@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en" data-composition-variables='[
+  {"id":"eyebrow","type":"string","label":"Eyebrow","default":"Word on the water · Oct 6 to Nov 5","group":"Hook"},
+  {"id":"q1","type":"string","label":"Title, line 1","default":"What anglers are","group":"Hook"},
+  {"id":"q2","type":"string","label":"Title, line 2 (italic)","default":"posting.","group":"Hook"},
+  {"id":"fb","type":"number","label":"Facebook posts read","default":420,"min":0,"max":99999,"step":1,"group":"Hook"},
+  {"id":"tt","type":"number","label":"TikTok videos read","default":32,"min":0,"max":9999,"step":1,"group":"Hook"},
+  {"id":"posts","type":"string","label":"Posts (JSON, from data/angler.js)","default":"[{\"src\":\"Facebook group · Nov 1\",\"water\":\"Detroit Lake\",\"where\":\"Western Cascades reservoir\",\"big\":\"20\",\"unit\":\"kokanee\",\"note\":\"A two-angler limit, trolling from the surface to 66 ft at 1.2–1.3 mph. The bite improved as the fog lifted.\"},{\"src\":\"Facebook group · Nov 1\",\"water\":\"Lake Billy Chinook\",\"where\":\"The narrows, not clearly the Crooked River arm\",\"big\":\"7\",\"unit\":\"kokanee\",\"note\":\"A few hours at 50 ft on white or white-pink dodgers with white flies or hoochies. Calm water.\"},{\"src\":\"Facebook group · Oct 23\",\"water\":\"Rogue River\",\"where\":\"Section not stated\",\"big\":\"40+\",\"unit\":\"inches\",\"note\":\"A personal best, apparently a wild late-run fish.\"}]","group":"Data"},
+  {"id":"tag1","type":"string","label":"End line (roman)","default":"Word on the water,","group":"End"},
+  {"id":"tag2","type":"string","label":"End line (italic)","default":"every week.","group":"End"},
+  {"id":"url1","type":"string","label":"Address","default":"ORFishForecast.com","group":"End"}
+]'>
+<head>
+<meta charset="utf-8">
+<title>Oregon Fish Forecast · Word on the water</title>
+<script src="vendor/gsap.min.js"></script>
+<script src="vendor/om.js"></script>
+<style id="om-fonts">
+@font-face { font-family: "Fraunces"; src: url("assets/fonts/Fraunces-full.woff2") format("woff2"); font-weight: 100 900; font-style: normal; }
+@font-face { font-family: "Fraunces"; src: url("assets/fonts/Fraunces-full-italic.woff2") format("woff2"); font-weight: 100 900; font-style: italic; }
+@font-face { font-family: "Instrument Sans"; src: url("assets/fonts/InstrumentSans-wght.woff2") format("woff2"); font-weight: 400 700; font-style: normal; }
+@font-face { font-family: "JetBrains Mono"; src: url("assets/fonts/JetBrainsMono-wght.woff2") format("woff2"); font-weight: 100 800; font-style: normal; }
+</style>
+<style>
+  :root { --ink: #023926; --ink-deep: #001F13; --on-ink: #ECF1E2; --on-ink-muted: #A8BEAC; --sun: #F8E532; --plate: #F9F7EE;
+          --paper: #F9F7EE; --paper-2: #EDEADD; --text: #0A251A; --muted: #4E6559; --river-deep: #1545A2;
+          --display: 'Fraunces', Georgia, serif; --sans: 'Instrument Sans', sans-serif; --mono: 'JetBrains Mono', monospace; }
+  html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: var(--paper-2); }
+  #film { position: relative; width: 1080px; height: 1920px; overflow: hidden; color: var(--text); font-family: var(--sans);
+          background: radial-gradient(1000px 900px at 30% 20%, #F4F1E6, var(--paper-2) 65%); -webkit-font-smoothing: antialiased; }
+  .abs { position: absolute; }
+  .eyebrow { font: 500 26px/1.3 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .display { font-family: var(--display); font-weight: 360; font-variation-settings: 'opsz' 144, 'SOFT' 30; letter-spacing: -0.035em; line-height: .92; margin: 0; }
+  .display em { font-style: italic; font-weight: 300; color: var(--river-deep); }
+  .mask { display: block; overflow: hidden; padding-bottom: .36em; margin-bottom: -.36em; }
+  .mask > span { display: block; }
+
+  #hook { position: absolute; inset: 0; }
+  #mark { left: 84px; top: 160px; display: flex; align-items: center; gap: 16px; font: 500 36px/1 var(--display); letter-spacing: -0.01em; }
+  #mark img { width: 120px; }
+  #mark em { font-style: italic; font-weight: 400; }
+  #hook .eyebrow { left: 84px; top: 320px; }
+  #q { left: 74px; top: 370px; font-size: 116px; width: 960px; }
+  #stat { left: 84px; top: 650px; font: 500 40px/1.3 var(--mono); letter-spacing: -0.01em; color: var(--text); }
+  #stat b { color: var(--river-deep); font-weight: 600; }
+  #hook .fine { left: 84px; top: 720px; font-size: 22px; }
+
+  /* the feed: posts scroll up like a phone feed, one per bar */
+  #feed { left: 0; top: 0; width: 1080px; height: 4000px; }
+  .post { position: absolute; left: 70px; width: 940px; height: 1040px; border-radius: 40px; background: var(--paper); border: 2px solid rgba(2, 57, 38, .12);
+          box-shadow: 0 30px 60px rgba(30, 40, 20, .14); }
+  .post .src { position: absolute; left: 56px; top: 54px; display: flex; align-items: center; gap: 14px; }
+  .post .src i { width: 14px; height: 14px; border-radius: 50%; background: var(--river-deep); }
+  .post h2 { position: absolute; left: 52px; top: 120px; margin: 0; font: 400 96px/1 var(--display); letter-spacing: -0.025em; white-space: nowrap; }
+  .post .where { position: absolute; left: 56px; top: 232px; width: 820px; font: 400 32px/1.3 var(--sans); color: var(--muted); }
+  .post .big { position: absolute; left: 48px; top: 330px; display: flex; align-items: baseline; gap: 26px; white-space: nowrap; }
+  .post .big b { font: 400 260px/.9 var(--mono); letter-spacing: -0.06em; color: var(--river-deep); }
+  .post .big span { font: italic 300 110px/1 var(--display); letter-spacing: -0.03em; color: var(--river-deep); }
+  .post .note { position: absolute; left: 56px; top: 640px; width: 820px; font: 400 46px/1.3 var(--sans); }
+  .post .wom { position: absolute; left: 56px; bottom: 54px; font-size: 22px; }
+
+  /* end card, on the site's forest */
+  #forest { position: absolute; inset: 0; background: radial-gradient(900px 800px at 78% 22%, rgba(46, 96, 52, .5), transparent 70%), linear-gradient(180deg, var(--ink-deep), #00261A 60%, #002A1C); }
+  #plate { left: 40px; top: 1190px; width: 1000px; height: 760px; border-radius: 34px 34px 0 0; overflow: hidden; background: var(--plate); }
+  #plate img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 62%; transform-origin: 50% 40%; }
+  #end { position: absolute; inset: 0; text-align: center; color: var(--on-ink); }
+  #end .display em { color: var(--sun); }
+  #efish { left: 300px; top: 280px; width: 480px; height: 232px; }
+  #efish img { width: 100%; height: 100%; filter: drop-shadow(0 24px 30px rgba(0, 12, 6, .55)); }
+  #word { left: 0; width: 1080px; top: 552px; font: 500 64px/1 var(--display); letter-spacing: -0.01em; }
+  #word em { font-style: italic; font-weight: 400; }
+  #tag { left: 0; width: 1080px; top: 660px; font-size: 92px; }
+  #url { left: 50%; top: 880px; display: flex; align-items: center; gap: 28px; padding: 30px 40px 30px 44px; border-radius: 999px; background: var(--sun); color: var(--ink-deep); white-space: nowrap; }
+  #url .t { font: 600 60px/1.1 var(--sans); letter-spacing: -0.015em; }
+  #url svg { width: 60px; height: 60px; flex: none; }
+</style>
+</head>
+<body>
+<div id="film" data-composition-id="film" data-width="1080" data-height="1920">
+  <audio id="om-sound" src="assets/sound.wav" data-start="0" data-duration="15" data-track-index="8" data-volume="1"></audio>
+  <section id="hook" data-om-id="title">
+    <div id="mark" class="abs" data-om-id="mark"><img src="assets/weather-fish.webp" alt=""><span>Oregon <em>Fish Forecast</em></span></div>
+    <div class="abs eyebrow" data-var-text="eyebrow">Word on the water · Oct 6 to Nov 5</div>
+    <h1 id="q" class="abs display">
+      <span class="mask"><span class="l1" data-var-text="q1">What anglers are</span></span>
+      <span class="mask"><span class="l2"><em data-var-text="q2">posting.</em></span></span>
+    </h1>
+    <div id="stat" class="abs" data-om-id="stat"><b id="fbN">420</b> posts · <b id="ttN">32</b> TikToks read</div>
+    <div class="abs eyebrow fine">Word of mouth · not verified</div>
+  </section>
+
+  <div id="feed" class="abs"></div>
+
+  <div id="forest" data-om-id="forest"></div>
+  <div id="plate" class="abs" data-om-id="artwork"><img src="assets/river-country.webp" alt=""></div>
+  <section id="end" data-om-id="end">
+    <div id="efish" class="abs" data-om-id="end-fish"><img src="assets/weather-fish.webp" alt="Oregon Fish Forecast"></div>
+    <div id="word" class="abs" data-om-id="wordmark">Oregon <em>Fish Forecast</em></div>
+    <h2 id="tag" class="abs display" data-om-id="tagline"><span data-var-text="tag1">Word on the water,</span><br><em data-var-text="tag2">every week.</em></h2>
+    <div id="url" class="abs" data-om-id="address"><div class="t" data-var-text="url1">ORFishForecast.com</div>
+      <svg viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M18 15V6H9"/></svg></div>
+  </section>
+</div>
+
+<script type="text/vnd.abc" id="om-score">
+X:1
+T:Oregon Fish Forecast · Word on the water (2-step, 120)
+M:4/4
+L:1/8
+Q:1/4=120
+K:Am
+V:RH inst=rhodes gain=0.6
+!mark:hook! !mp! z[ACEG] z2 z[ACEG] z2 | [M:2/4] z[ACEG] z2 | [M:4/4] !mark:p1! !mf! z[FAce] z2 z[FAce] z2 | [M:2/4] z[FAce] z2 | [M:4/4] !mark:p2! z[DFAc] z2 z[DFAc] z2 | [M:2/4] z[DFAc] z2 | [M:4/4] !mark:p3! !f! z[EGBd] z2 z[EGBd] z2 | [M:2/4] z[E^GB] z2 | [M:4/4] [K:D] !mark:end! !f! z[DFAc] z2 z[DFAc] z2 | [M:2/4] [DFAd]4 |]
+V:BS inst=synbass gain=0.8
+!mp! A,,3 A,, z A,,2 z | [M:2/4] A,,3 z | [M:4/4] !mf! F,,3 F,, z F,,2 z | [M:2/4] F,,3 z | [M:4/4] D,,3 D,, z D,,2 z | [M:2/4] D,,3 z | [M:4/4] !f! E,,3 E,, z E,,2 z | [M:2/4] E,,2 z2 | [M:4/4] [K:D] !ff! D,,3 D,, z D,,2 z | [M:2/4] D,,4 |]
+V:DR inst=drums kit=pop gain=0.85
+!mp! C,,2 D,,2 z C,, D,,2 | [M:2/4] C,,2 D,,2 | [M:4/4] !mf! C,,2 D,,2 z C,, D,,2 | [M:2/4] C,,2 D,,2 | [M:4/4] C,,2 D,,2 z C,, D,,2 | [M:2/4] C,,2 D,,D,, | [M:4/4] !f! C,,2 D,,2 z C,, D,,2 | [M:2/4] C,,2 !rise(! z2 | [M:4/4] !rise)! !hit! !ff! [C,,^C,]2 D,,2 z C,, D,,2 | [M:2/4] [C,,^C,]2 z2 |]
+V:HH inst=drums kit=pop gain=0.35
+z^F,, z^F,, z^F,, z^F,, | [M:2/4] z^F,, z^F,, | [M:4/4] z^F,, z^F,, z^F,, z^A,, | [M:2/4] z^F,, z^F,, | [M:4/4] z^F,, z^F,, z^F,, z^A,, | [M:2/4] z^F,, z^F,, | [M:4/4] ^F,,/^F,,/^F,,/^F,,/ ^F,,/^F,,/^F,,/^F,,/ ^F,,/^F,,/^F,,/^F,,/ ^F,,/^F,,/^F,,/^F,,/ | [M:2/4] z4 | [M:4/4] z^F,, z^F,, z^F,, z^F,, | [M:2/4] z4 |]
+V:GL inst=glock gain=0.55
+z8 | [M:2/4] z4 | [M:4/4] e'2 z6 | [M:2/4] z4 | [M:4/4] d'2 z6 | [M:2/4] z4 | [M:4/4] b2 z6 | [M:2/4] z4 | [M:4/4] [K:D] z2 A d e a3 | [M:2/4] z4 |]
+</script>
+
+<script>
+  const V = OM.vars();
+  OM.music({ bpm: 120 });
+  const B = (n) => OM.beat(n);
+  const $ = (s) => document.querySelector(s);
+  const esc = (s) => String(s).replace(/[<>&]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' })[c]);
+
+  // ---- the feed of posts (summaries from the site's angler data: no names, handles or photos)
+  const P = JSON.parse(V.posts);
+  const GAP = 1500, TOP = 330;          // card pitch (the last post leaves the frame), and where the card being read sits
+  $('#feed').innerHTML = P.map((p, k) =>
+    `<article class="post" data-om-id="post-${k + 1}" style="top:${k * GAP}px">` +
+    `<div class="src eyebrow"><i></i>${esc(p.src)}</div><h2>${esc(p.water)}</h2><div class="where">${esc(p.where)}</div>` +
+    `<div class="big"><b>${esc(p.big)}</b><span>${esc(p.unit)}</span></div><div class="note">${esc(p.note)}</div>` +
+    `<div class="wom eyebrow">Word of mouth · not verified</div></article>`).join('');
+  const posts = gsap.utils.toArray('.post');
+  const feedY = (k) => TOP - k * GAP;   // the feed offset that puts post k in the reading spot
+
+  // ---- hidden until their moment
+  gsap.set('#q .l2', { yPercent: 160 });
+  gsap.set(['#stat', '#hook .fine', '#forest', '#plate', '#end'], { autoAlpha: 0 });
+  gsap.set('#plate', { y: 820 });
+  gsap.set('#url', { xPercent: -50 });
+  gsap.set('#feed', { y: 1500 });       // the first post peeks in at the bottom during the hook
+
+  const tl = gsap.timeline({ paused: true, defaults: { ease: 'expo.out' } });
+
+  // ================= hook (beats 0–6)
+  tl.addLabel('scene:hook', 0);
+  tl.to('#q .l2', { yPercent: 0, duration: B(1) }, B(.5));
+  tl.fromTo('#mark', { x: -40, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: B(1.2) }, 0);
+  tl.fromTo('#feed', { y: 1700 }, { y: 1460, duration: B(5.6), ease: 'sine.out', immediateRender: false }, 0);
+  tl.fromTo('#q', { scale: 1 }, { scale: 1.035, transformOrigin: '0% 50%', duration: B(6), ease: 'none', immediateRender: false }, 0);
+  tl.fromTo('#stat', { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: B(1), immediateRender: false }, B(2));
+  const c = { fb: 0, tt: 0 };
+  tl.fromTo(c, { fb: 0, tt: 0 }, { fb: V.fb, tt: V.tt, duration: B(1.6), ease: 'expo.out', immediateRender: false,
+    onUpdate: () => { $('#fbN').textContent = Math.round(c.fb); $('#ttN').textContent = Math.round(c.tt); } }, B(2));
+  OM.sfx('count', B(2.6), { gain: .4 });
+  tl.fromTo('#hook .fine', { autoAlpha: 0 }, { autoAlpha: 1, duration: B(1), immediateRender: false }, B(3));
+  OM.sfx('pop', B(.5), { gain: .35, note: 3 });
+
+  // ================= the posts (beats 6–24): the feed swipes up one post per bar and a half
+  posts.forEach((el, k) => {
+    const at = B(6 + k * 6);
+    tl.addLabel(`scene:p${k + 1}`, at);
+    if (k === 0) tl.to('#hook', { y: -260, autoAlpha: 0, duration: B(.7), ease: 'power2.in' }, at - B(.5));
+    tl.to('#feed', { y: feedY(k), duration: B(.9), ease: 'expo.inOut' }, at - B(.45));
+    OM.sfx('whoosh', at - B(.1), { gain: .38 });
+    const big = el.querySelector('.big');
+    tl.fromTo(big, { scale: 1.25, transformOrigin: '0% 70%' }, { scale: 1, duration: B(1.2), immediateRender: false }, at);
+    OM.sfx('thud', at + B(.15), { gain: .45, pan: [-.2, .2, 0][k] });
+    tl.fromTo(el.querySelector('.note'), { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: B(1), immediateRender: false }, at + B(.6));
+    tl.fromTo(el, { scale: 1 }, { scale: 1.02, transformOrigin: '50% 30%', duration: B(5), ease: 'none', immediateRender: false }, at + B(.8));
+  });
+
+  // ================= end (beats 24–30) on the site's forest
+  tl.addLabel('scene:end', B(24));
+  tl.to('#feed', { y: feedY(3), duration: B(.9), ease: 'expo.inOut' }, B(24) - B(.45));
+  tl.set(['#forest', '#plate', '#end'], { autoAlpha: 1 }, B(24));
+  tl.set('#feed', { autoAlpha: 0 }, B(24.2));
+  tl.fromTo('#efish', { y: 700, rotation: -30, scale: .7 }, { y: 0, rotation: 0, scale: 1, duration: B(1.4), ease: OM.spring(0.14), immediateRender: false }, B(24));
+  tl.to('#plate', { y: 0, duration: B(1.8) }, B(24));
+  tl.fromTo('#plate img', { scale: 1.14 }, { scale: 1, duration: B(6), ease: 'power1.out' }, B(24));
+  OM.sfx('sparkle', B(24.7), { gain: .45 });
+  tl.fromTo('#word', { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: B(1), immediateRender: false }, B(24.6));
+  tl.fromTo('#tag', { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: B(1), immediateRender: false }, B(25));
+  tl.fromTo('#url', { autoAlpha: 0, y: 60, scale: .9 }, { autoAlpha: 1, y: 0, scale: 1, duration: B(1.2), ease: 'back.out(1.5)', immediateRender: false }, B(26));
+  OM.sfx('pop', B(26) + .06, { gain: .5, note: 5 });
+  tl.fromTo('#end', { scale: 1 }, { scale: 1.03, transformOrigin: '50% 35%', duration: B(5), ease: 'none', immediateRender: false }, B(25));
+  tl.to({}, { duration: Math.max(0, B(30) - tl.duration()) }, tl.duration());
+
+  window.__timelines['film'] = tl;
+</script>
+</body>
+</html>
