@@ -14,11 +14,11 @@ Everything you need to set up the account and get the first week of posts out. Y
 |---|---|---|
 | Username | **@orfishforecast** (matches the domain). Backups: @oregonfishforecast, @or.fishforecast, @orfishforecast_ | 24 characters |
 | Name | **Oregon Fish Forecast** | 30 characters |
-| Bio | **Read the river before you drive. 🎣 Oregon fish counts, stocking & reports, weekly.** | 80 characters |
+| Bio | **Read the river before you drive. 🎣 Oregon fish counts, stocking & reports.** | 80 characters |
 | Website | **https://orfishforecast.com** (if TikTok doesn't offer the field yet, put ORFishForecast.com at the end of the bio instead) | |
 | Photo | `profile-paper.png` (recommended) or `profile-forest.png`, both 1080 x 1080. The fish sits fully inside TikTok's circle crop. | |
 
-Bio backup if you'd rather have the domain in the text: **Read the river before you drive. Oregon fish forecasts 👉 ORFishForecast.com** (77 characters)
+Bio backup if you'd rather have the domain in the text: **Read the river before you drive. Oregon fish forecasts 👉 ORFishForecast.com** (75 characters)
 
 ## 3. First week of posts
 
