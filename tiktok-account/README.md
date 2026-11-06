@@ -4,7 +4,7 @@ Everything you need to set up the account and get the first week of posts out. Y
 
 ## 1. Sign up
 
-1. Already have a TikTok account? Tap your username at the top of your profile > **Add account > Sign up**, so you can switch between the two accounts in one app. Sign up with an email the other account doesn't use: TikTok allows each email and phone number on only one account. Best is an address on the site's domain (like hello@orfishforecast.com). A Gmail alias such as yourname+orff@gmail.com lands in the same inbox and usually works too. Skip the phone number at sign-up; you can add it later only if it isn't on another account.
+1. Already have a TikTok account? Tap your username at the top of your profile > **Add account > Sign up**, so you can switch between the two accounts in one app. Sign up with an email the other account doesn't use: TikTok allows each email and phone number on only one account. Best is an address on the site's domain (like hello@orfishforecast.com). Gmail "+" aliases don't work: TikTok reads yourname+orff@gmail.com as yourname@gmail.com and says you've already signed up. The simplest fix is a new free Gmail for the brand, such as orfishforecast@gmail.com, which you can use for the site's other social accounts too. Skip the phone number at sign-up; you can add it later only if it isn't on another account.
 2. Pick the username below, then in **Settings > Account** switch to a **Business account** (category: Media / Outdoors, or the closest TikTok offers). A business account gives you analytics and makes it easier to get a clickable website link. Our clips use their own original music, so the business account's smaller music library doesn't affect them.
 3. Turn on two-step verification in **Settings > Security**.
 
